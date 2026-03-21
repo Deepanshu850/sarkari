@@ -1,0 +1,23 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 69.62.84.81
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/sarkari
+            git pull origin main
+            composer install --no-dev --optimize-autoloader 2>&1 | tail -3
+            chown -R www-data:www-data /var/www/sarkari
+            chmod -R 775 /var/www/sarkari/storage
+            echo "Deployed at $(date)"

@@ -1,0 +1,11 @@
+vendor/
+.env
+storage/pdfs/*
+storage/logs/*
+!storage/pdfs/.gitkeep
+!storage/logs/.gitkeep
+.DS_Store
+composer
+composer-setup.php
+composer.phar
+*.bak

@@ -126,6 +126,8 @@ $router->post('/payment/initiate', [\App\Controllers\PaymentController::class, '
 $router->get('/api/exam-subjects/{id}', [\App\Controllers\BlueprintController::class, 'getSubjects']);
 $router->post('/api/progress/toggle', [\App\Controllers\BlueprintController::class, 'toggleProgress']);
 $router->post('/api/result/submit', [\App\Controllers\BlueprintController::class, 'submitResult']);
+$router->post('/api/blueprint/generate/{id}', [\App\Controllers\BlueprintController::class, 'doGenerate']);
+$router->get('/api/blueprint/status/{id}', [\App\Controllers\BlueprintController::class, 'checkStatus']);
 
 // PDF
 $router->get('/blueprint/download/{id}', [\App\Controllers\PdfController::class, 'download']);

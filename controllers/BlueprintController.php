@@ -115,24 +115,22 @@ class BlueprintController extends Controller {
         $draft['exam_date'] = $examDate;
         $_SESSION['blueprint_draft'] = $draft;
 
-        // Check if user has remaining blueprint credits from their plan
+        // Check if user has remaining blueprint credits
         $blueprintModel = new Blueprint();
-        $readyCount = $blueprintModel->countByStatus(Auth::id(), 'ready');
+        $readyCount = $blueprintModel->countByStatus(\App\Core\Auth::id(), 'ready');
         $allowed = blueprints_allowed();
 
         if ($readyCount < $allowed) {
-            // User has credits remaining — skip payment, generate directly
             redirect('/blueprint/generate');
         } else {
-            // No credits — need to upgrade/pay
             redirect('/blueprint/review');
         }
     }
 
     /**
      * GET /blueprint/generate
-     * Direct generation for users who already paid (have blueprint credits).
-     * Skips payment entirely — creates blueprint and generates immediately.
+     * Creates blueprint from draft and shows generating page.
+     * Generation happens via AJAX to avoid timeout.
      */
     public function generate(): void {
         $this->requireAuth();
@@ -143,20 +141,18 @@ class BlueprintController extends Controller {
             return;
         }
 
-        // Verify user still has credits
+        // Verify credits
         $blueprintModel = new Blueprint();
-        $readyCount = $blueprintModel->countByStatus(Auth::id(), 'ready');
-        $allowed = blueprints_allowed();
-
-        if ($readyCount >= $allowed) {
-            flash('error', 'Aapki plan limit reach ho gayi hai. Upgrade karein.');
+        $readyCount = $blueprintModel->countByStatus(\App\Core\Auth::id(), 'ready');
+        if ($readyCount >= blueprints_allowed()) {
+            flash('error', 'Blueprint limit reached. Upgrade your plan.');
             redirect('/dashboard');
             return;
         }
 
-        // Create blueprint directly (no payment needed — already paid via plan)
+        // Create blueprint record
         $blueprintId = $blueprintModel->create([
-            'user_id'       => Auth::id(),
+            'user_id'       => \App\Core\Auth::id(),
             'exam_id'       => $draft['exam_id'],
             'education'     => $draft['education'],
             'weak_subjects' => json_encode($draft['weak_subjects']),
@@ -165,11 +161,66 @@ class BlueprintController extends Controller {
             'status'        => 'generating',
         ]);
 
-        $blueprint = $blueprintModel->getWithExam($blueprintId);
+        unset($_SESSION['blueprint_draft']);
 
-        // Import PaymentController for generation logic
+        // Show generating page — generation will happen via AJAX
+        $blueprint = $blueprintModel->getWithExam($blueprintId);
+        $this->view('blueprint/generating', [
+            'pageTitle' => 'Generating Your Blueprint...',
+            'blueprint' => $blueprint,
+            'blueprintId' => $blueprintId,
+        ]);
+    }
+
+    /**
+     * POST /api/blueprint/generate/{id}
+     * AJAX endpoint — actually runs AI generation. Called from the generating page.
+     */
+    public function doGenerate(string $id): void {
+        $this->requireAuth();
+
+        $blueprintModel = new Blueprint();
+        $blueprint = $blueprintModel->getWithExam((int) $id);
+
+        if (!$blueprint || (int)$blueprint['user_id'] !== \App\Core\Auth::id()) {
+            json_response(['error' => 'Not found'], 404);
+            return;
+        }
+
+        if ($blueprint['status'] === 'ready') {
+            json_response(['status' => 'ready', 'redirect' => '/blueprint/view/' . $id]);
+            return;
+        }
+
+        if ($blueprint['status'] !== 'generating') {
+            json_response(['error' => 'Invalid status'], 400);
+            return;
+        }
+
+        // Run generation
         $paymentController = new \App\Controllers\PaymentController();
-        $paymentController->generateAndFinalize($blueprintId, $blueprint, $blueprintModel);
+        $paymentController->generateAndFinalize((int) $id, $blueprint, $blueprintModel);
+    }
+
+    /**
+     * GET /api/blueprint/status/{id}
+     * AJAX poll endpoint — returns current blueprint status.
+     */
+    public function checkStatus(string $id): void {
+        $this->requireAuth();
+
+        $blueprintModel = new Blueprint();
+        $blueprint = $blueprintModel->find((int) $id);
+
+        if (!$blueprint || (int)$blueprint['user_id'] !== \App\Core\Auth::id()) {
+            json_response(['error' => 'Not found'], 404);
+            return;
+        }
+
+        json_response([
+            'status' => $blueprint['status'],
+            'redirect' => $blueprint['status'] === 'ready' ? '/blueprint/view/' . $id : null,
+        ]);
     }
 
     public function review(): void {
@@ -178,18 +229,9 @@ class BlueprintController extends Controller {
         if (!$draft || !isset($draft['exam_date'])) {
             redirect('/blueprint/step3');
         }
-
-        // Show how many credits remaining
-        $blueprintModel = new Blueprint();
-        $readyCount = $blueprintModel->countByStatus(Auth::id(), 'ready');
-        $allowed = blueprints_allowed();
-
         $this->view('blueprint/review', [
-            'pageTitle' => 'Review & Upgrade',
+            'pageTitle' => 'Upgrade Plan',
             'draft' => $draft,
-            'readyCount' => $readyCount,
-            'allowed' => $allowed,
-            'needsUpgrade' => true,
         ]);
     }
 

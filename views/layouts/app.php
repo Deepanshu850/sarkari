@@ -15,6 +15,14 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
   gtag('js', new Date());
   gtag('config', 'G-2DB51VWB3L');
 </script>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vzpyrt8jnh");
+</script>
 <html lang="hi-IN" dir="ltr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">

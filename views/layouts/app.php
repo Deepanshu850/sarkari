@@ -7,6 +7,14 @@ $_seo_image = base_url() . '/public/images/og-sarkari.png';
 $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, SSC CGL study plan, IBPS PO blueprint, RRB NTPC timetable, UPSC preparation, exam study schedule, AI study plan, 30 day study plan, sarkari exam strategy';
 ?>
 <!DOCTYPE html>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2DB51VWB3L"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2DB51VWB3L');
+</script>
 <html lang="hi-IN" dir="ltr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">

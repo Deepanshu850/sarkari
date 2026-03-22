@@ -510,11 +510,11 @@
     $totalDays = count($days);
 
     $motivationalQuotes = [
-        ['hindi' => '"अनुशासन ही सफलता की कुंजी है।"', 'english' => '"Discipline is the key to success."'],
-        ['hindi' => '"कठिन परिश्रम का कोई विकल्प नहीं है।"', 'english' => '"There is no substitute for hard work."'],
-        ['hindi' => '"जो सोचता है वो करता है, जो करता है वो पाता है।"', 'english' => '"Those who plan, act; those who act, achieve."'],
-        ['hindi' => '"हर दिन एक नई शुरुआत है।"', 'english' => '"Every day is a new beginning — make it count."'],
-        ['hindi' => '"मंजिल उन्हीं को मिलती है जिनके सपनों में जान होती है।"', 'english' => '"Destination belongs to those whose dreams have life."'],
+        ['english' => '"Discipline is the key to success. Stay consistent."'],
+        ['english' => '"There is no substitute for hard work. Keep going."'],
+        ['english' => '"Those who plan, act. Those who act, achieve."'],
+        ['english' => '"Every day is a new beginning - make it count."'],
+        ['english' => '"Your destination awaits. One day at a time."'],
     ];
 ?>
 
@@ -567,8 +567,8 @@
 
         <!-- Motivational Quote -->
         <div class="cover-quote-box">
-            <div class="cover-quote-hindi">"सफलता उसे मिलती है जो योजना बनाता है।"</div>
-            <div class="cover-quote-english">"Success belongs to those who plan." — Ancient Wisdom</div>
+            <div class="cover-quote-hindi">"Success belongs to those who plan."</div>
+            <div class="cover-quote-english">"Success belongs to those who plan." &mdash; Ancient Wisdom</div>
         </div>
 
         <div class="confidential-tag">
@@ -587,49 +587,49 @@
     <div class="tricolor-bar"></div>
 
     <div class="section-header">
-        <span class="section-header-accent">&#9654;</span> Study Strategy &amp; Overview
+        <span class="section-header-accent">></span> Study Strategy &amp; Overview
     </div>
 
     <div class="summary-body">
 
         <?php if (!empty($blueprint['summary'])): ?>
         <div class="strategy-card">
-            <div class="strategy-card-label">&#128270; Strategy Overview</div>
+            <div class="strategy-card-label">> Strategy Overview</div>
             <div class="strategy-card-text"><?= htmlspecialchars($blueprint['summary']) ?></div>
         </div>
         <?php endif; ?>
 
         <!-- Quick Stats Grid -->
         <div class="stats-grid">
-            <div class="stats-grid-title">&#9889; Quick Stats at a Glance</div>
+            <div class="stats-grid-title">* Quick Stats at a Glance</div>
             <div>
                 <div class="stat-cell">
-                    <div class="stat-icon">&#128197;</div>
+                    <div class="stat-icon">#</div>
                     <div class="stat-label">Total Days</div>
                     <div class="stat-value"><?= $totalDays ?></div>
                 </div>
                 <div class="stat-cell">
-                    <div class="stat-icon">&#9200;</div>
+                    <div class="stat-icon">#</div>
                     <div class="stat-label">Hours / Day</div>
                     <div class="stat-value"><?= htmlspecialchars($blueprint['study_hours']) ?></div>
                 </div>
                 <div class="stat-cell">
-                    <div class="stat-icon">&#127891;</div>
+                    <div class="stat-icon">#</div>
                     <div class="stat-label">Education</div>
                     <div class="stat-value"><?= htmlspecialchars($blueprint['education']) ?></div>
                 </div>
                 <div class="stat-cell">
-                    <div class="stat-icon">&#127919;</div>
+                    <div class="stat-icon">#</div>
                     <div class="stat-label">Exam Date</div>
                     <div class="stat-value"><?= date('d M Y', strtotime($blueprint['exam_date'])) ?></div>
                 </div>
                 <div class="stat-cell">
-                    <div class="stat-icon">&#128198;</div>
+                    <div class="stat-icon">#</div>
                     <div class="stat-label">Weeks Planned</div>
                     <div class="stat-value"><?= ceil($totalDays / 7) ?></div>
                 </div>
                 <div class="stat-cell">
-                    <div class="stat-icon">&#128215;</div>
+                    <div class="stat-icon">#</div>
                     <div class="stat-label">Focus Areas</div>
                     <div class="stat-value"><?= count($weakSubjects) ?></div>
                 </div>
@@ -639,7 +639,7 @@
         <!-- Weak Areas Spotlight -->
         <?php if (!empty($weakSubjects)): ?>
         <div class="weak-areas-box">
-            <div class="weak-areas-title">&#9888; Your Focus Areas — Extra Attention Required</div>
+            <div class="weak-areas-title">(!) Your Focus Areas &mdash; Extra Attention Required</div>
             <?php foreach ($weakSubjects as $area): ?>
                 <span class="weak-area-pill"><?= htmlspecialchars($area) ?></span>
             <?php endforeach; ?>
@@ -659,7 +659,7 @@
 <div class="page-break"></div>
 <div class="tricolor-bar"></div>
 <div class="section-header">
-    <span class="section-header-accent">&#9654;</span> Your Day-by-Day Blueprint
+    <span class="section-header-accent">></span> Your Day-by-Day Blueprint
 </div>
 
 <?php
@@ -677,7 +677,7 @@ foreach ($days as $i => $day):
         <div class="page-break"></div>
         <div class="tricolor-bar"></div>
         <div class="section-header">
-            <span class="section-header-accent">&#9654;</span> Day-by-Day Blueprint (continued)
+            <span class="section-header-accent">></span> Day-by-Day Blueprint (continued)
         </div>
 <?php endif; ?>
 
@@ -701,7 +701,7 @@ foreach ($days as $i => $day):
     <div class="content-wrap">
         <div class="day-block day-block-<?= $wClass ?>">
             <div class="day-header">
-                <span class="day-checkbox">&#9744;</span>
+                <span class="day-checkbox">[ ]</span>
                 <span class="day-number-badge day-number-badge-<?= $wClass ?>">DAY <?= $dayNum ?></span>
                 <span class="day-title"><?= htmlspecialchars($day['title']) ?></span>
             </div>
@@ -715,7 +715,7 @@ foreach ($days as $i => $day):
                 <?php foreach ($subjects as $sub): ?>
                 <div class="subject-row">
                     <span class="subject-pill"><?= htmlspecialchars($sub['subject'] ?? '') ?></span>
-                    <span class="subject-hours-badge">&#9201; <?= htmlspecialchars($sub['hours'] ?? '0') ?> hrs</span>
+                    <span class="subject-hours-badge">* <?= htmlspecialchars($sub['hours'] ?? '0') ?> hrs</span>
 
                     <?php if (!empty($sub['topics'])): ?>
                     <ul class="topics-list">
@@ -729,7 +729,7 @@ foreach ($days as $i => $day):
 
                 <?php if (!empty($day['tips'])): ?>
                 <div class="tips-box">
-                    <span class="tips-box-label">&#128161; Pro Tip: </span><?= htmlspecialchars($day['tips']) ?>
+                    <span class="tips-box-label">* Pro Tip: </span><?= htmlspecialchars($day['tips']) ?>
                 </div>
                 <?php endif; ?>
 
@@ -742,12 +742,12 @@ foreach ($days as $i => $day):
                     <div class="resources-title">Resources</div>
                     <?php foreach ($resources as $res):
                         $rtype = strtolower(trim($res['type'] ?? 'book'));
-                        $icon = '&#128218;';
+                        $icon = '&gt;';
                         $labelClass = 'res-book';
                         if (strpos($rtype, 'practice') !== false || strpos($rtype, 'test') !== false) {
-                            $icon = '&#128221;'; $labelClass = 'res-practice';
+                            $icon = '&gt;'; $labelClass = 'res-practice';
                         } elseif (strpos($rtype, 'pyq') !== false || strpos($rtype, 'previous') !== false) {
-                            $icon = '&#127919;'; $labelClass = 'res-pyq';
+                            $icon = '&gt;'; $labelClass = 'res-pyq';
                         }
                     ?>
                     <div class="resource-item">
@@ -771,9 +771,8 @@ foreach ($days as $i => $day):
 ?>
     <div class="content-wrap">
         <div class="motivation-box">
-            <div class="motivation-star">&#11088;</div>
-            <div class="motivation-hindi"><?= $quote['hindi'] ?></div>
-            <div class="motivation-english"><?= $quote['english'] ?></div>
+            <div class="motivation-star">*</div>
+            <div class="motivation-english" style="font-size:14px;font-weight:bold;"><?= $quote['english'] ?></div>
             <div class="motivation-source">Weekly Motivation &mdash; Sarkari Blueprint</div>
         </div>
     </div>

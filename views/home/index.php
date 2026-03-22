@@ -329,7 +329,7 @@ $schemaExtra = str_replace(
                         <!-- Exam Picker: Tabbed Category - compact -->
                         <div>
                             <label class="block text-xs sm:text-sm font-semibold text-navy-600 mb-1.5">Kaun sa Exam? *</label>
-                            <input type="hidden" name="exam_id" id="selectedExamId" value="<?= old('exam_id') ?>" required>
+                            <input type="hidden" name="exam_id" id="selectedExamId" value="<?= old('exam_id') ?>">
 
                             <!-- Category Tabs - smaller on mobile -->
                             <div class="flex gap-1 sm:gap-1.5 overflow-x-auto pb-1.5 scrollbar-hide exam-tabs" role="tablist">
@@ -944,7 +944,20 @@ function selectExam(btn) {
             e.preventDefault();
             var errEl = document.getElementById('examPickerError');
             errEl.classList.remove('hidden');
-            examId.closest('div').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            errEl.textContent = 'Pehle ek exam select karo (upar tabs mein se)';
+            errEl.style.color = 'red';
+            errEl.style.fontWeight = 'bold';
+            errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Shake the exam tabs
+            var tabs = document.querySelector('.exam-tabs');
+            if (tabs) { tabs.style.animation = 'shake 0.5s'; setTimeout(function(){ tabs.style.animation = ''; }, 500); }
+            return;
+        }
+        // Show loading state on button
+        var btn = form.querySelector('button[type="submit"]');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<div style="border:3px solid rgba(255,255,255,0.3);border-top:3px solid white;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;display:inline-block;margin-right:8px;"></div> Payment pe redirect ho raha hai...';
         }
     });
 })();
@@ -977,10 +990,23 @@ function selectPlan(card) {
         }
     });
 
-    // Scroll to form
+    // Scroll to form and pulse button
     var formEl = document.getElementById('get-blueprint');
     if (formEl) {
         formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Pulse the submit button
+        setTimeout(function() {
+            var btn = document.querySelector('form[action="/checkout"] button[type="submit"]');
+            if (btn) {
+                btn.style.transform = 'scale(1.05)';
+                btn.style.boxShadow = '0 0 30px rgba(255,107,0,0.5)';
+                setTimeout(function() { btn.style.transform = ''; btn.style.boxShadow = ''; }, 1000);
+            }
+        }, 800);
     }
 }
 </script>
+<style>
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+@keyframes spin { to{transform:rotate(360deg)} }
+</style>

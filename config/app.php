@@ -31,14 +31,14 @@ define('BLUEPRINT_DAYS', 30);
 
 // Plan pricing and limits
 define('PLANS', [
-    'starter'  => ['price' => 499,  'paise' => 49900,  'blueprints' => 1, 'label' => 'Starter',  'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee']],
-    'pro'      => ['price' => 799,  'paise' => 79900,  'blueprints' => 2, 'label' => 'Pro',      'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee', 'edit_regenerate', 'priority', 'referral']],
-    'ultimate' => ['price' => 999,  'paise' => 99900,  'blueprints' => 3, 'label' => 'Ultimate', 'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee', 'edit_regenerate', 'priority', 'referral', 'unlimited_regen', 'lifetime']],
+    'starter'  => ['price' => 99,   'paise' => 9900,   'blueprints' => 1, 'label' => 'Starter',  'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee']],
+    'pro'      => ['price' => 199,  'paise' => 19900,  'blueprints' => 2, 'label' => 'Pro',      'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee', 'edit_regenerate', 'priority', 'referral']],
+    'ultimate' => ['price' => 299,  'paise' => 29900,  'blueprints' => 3, 'label' => 'Ultimate', 'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee', 'edit_regenerate', 'priority', 'referral', 'unlimited_regen', 'lifetime']],
 ]);
 
 // Default/fallback for old code
-define('BLUEPRINT_PRICE', 499);
-define('BLUEPRINT_PRICE_PAISE', 49900);
+define('BLUEPRINT_PRICE', 99);
+define('BLUEPRINT_PRICE_PAISE', 9900);
 
 define('STORAGE_PATH', __DIR__ . '/../storage');
 

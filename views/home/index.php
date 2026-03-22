@@ -5,7 +5,7 @@ $allExams = $examModel->raw("SELECT * FROM exams WHERE is_active = 1 ORDER BY so
 
 // SEO overrides for landing page
 $pageTitle = 'Sarkari Naukri 30-Day Study Blueprint - AI Powered Exam Plan';
-$pageDescription = '₹499 mein personalized 30-day study plan for SSC CGL, IBPS PO, RRB NTPC, UPSC, State PSC. AI-powered timetable with daily schedule, weak subject focus, revision plan & mock tests. Instant PDF download.';
+$pageDescription = '₹99 mein personalized 30-day study plan for SSC CGL, IBPS PO, RRB NTPC, UPSC, State PSC. AI-powered timetable with daily schedule, weak subject focus, revision plan & mock tests. Instant PDF download.';
 $pageKeywords = 'sarkari naukri preparation, government exam study plan, SSC CGL 30 day plan, IBPS PO study timetable, RRB NTPC preparation strategy, UPSC daily schedule, AI exam blueprint, personalized study plan India, sarkari exam coaching alternative, exam preparation PDF';
 
 // Product + AggregateRating + Review Schema (rich snippets)
@@ -203,7 +203,7 @@ $schemaExtra = str_replace(
 <!-- MOBILE STICKY CTA BAR (visible only on mobile when form is out of view) -->
 <div id="stickyCta" class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-saffron-500 p-3 shadow-2xl transform translate-y-full transition-transform duration-300 lg:hidden">
     <a href="#get-blueprint" class="flex items-center justify-center gap-2 w-full py-3 bg-saffron-500 text-white rounded-xl font-bold text-base shadow-lg">
-        ₹499 — Abhi Blueprint Lo
+        ₹99 — Abhi Blueprint Lo
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
     </a>
 </div>
@@ -272,7 +272,7 @@ $schemaExtra = str_replace(
                         <?php
                         $reviews = [
                             ['name' => 'Priya M.', 'exam' => 'SSC CGL', 'city' => 'Lucknow', 'text' => 'Mujhe samajh hi nahi aata tha kahan se start karun. Blueprint follow kiya, 45 din mein Prelims clear ho gaya.'],
-                            ['name' => 'Rohit K.', 'exam' => 'IBPS PO', 'city' => 'Patna', 'text' => 'Coaching chhod di thi. ₹499 mein jo plan mila wo ₹40,000 ki coaching se better tha. Sach mein.'],
+                            ['name' => 'Rohit K.', 'exam' => 'IBPS PO', 'city' => 'Patna', 'text' => 'Coaching chhod di thi. ₹99 mein jo plan mila wo ₹40,000 ki coaching se better tha. Sach mein.'],
                             ['name' => 'Anjali S.', 'exam' => 'RRB NTPC', 'city' => 'Jaipur', 'text' => 'PDF print karke wall pe lagaya. Roz follow kiya. Selection aa gaya. Best investment.'],
                         ];
                         foreach ($reviews as $r):
@@ -294,8 +294,8 @@ $schemaExtra = str_replace(
                         <div class="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-black px-6 py-1 rotate-[25deg] transform translate-x-2 -translate-y-0.5 shadow">LIMITED</div>
                         <p class="text-white font-bold text-base sm:text-lg">Apna Blueprint Abhi Paayein</p>
                         <div class="flex items-center justify-center gap-2 mt-0.5">
-                            <span class="text-white/60 line-through text-xs sm:text-sm">₹999</span>
-                            <span class="text-white font-black text-xl sm:text-2xl">₹499</span>
+                            <span class="text-white/60 line-through text-xs sm:text-sm">₹199</span>
+                            <span class="text-white font-black text-xl sm:text-2xl">₹99</span>
                             <span class="bg-white/20 text-white text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded">50% OFF</span>
                         </div>
                     </div>
@@ -373,7 +373,7 @@ $schemaExtra = str_replace(
                         <button type="submit"
                             class="w-full py-3.5 sm:py-4 bg-saffron-500 text-white rounded-xl font-black text-base sm:text-lg hover:bg-saffron-600 transition shadow-xl shadow-saffron-500/20 pulse-cta flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                            <span id="checkoutCtaLabel" class="whitespace-nowrap">₹499 mein Blueprint Lo →</span>
+                            <span id="checkoutCtaLabel" class="whitespace-nowrap">₹99 mein Blueprint Lo →</span>
                         </button>
 
                         <!-- Trust row - compact on mobile -->
@@ -400,7 +400,7 @@ $schemaExtra = str_replace(
                 <!-- Urgency -->
                 <div class="mt-3 bg-red-50 border border-red-200 rounded-lg p-3 text-center">
                     <p class="text-red-700 text-sm font-semibold">
-                        Ye price aaj <span id="countdown" class="font-black text-red-800">23:59:59</span> tak hai. Kal se ₹999.
+                        Ye price aaj <span id="countdown" class="font-black text-red-800">23:59:59</span> tak hai. Kal se ₹199.
                     </p>
                 </div>
 
@@ -433,10 +433,10 @@ $schemaExtra = str_replace(
             <?php
             $mobileReviews = [
                 ['name' => 'Priya M.', 'exam' => 'SSC CGL', 'city' => 'Lucknow', 'text' => '45 din mein Prelims clear ho gaya. Best investment.', 'stars' => 5],
-                ['name' => 'Rohit K.', 'exam' => 'IBPS PO', 'city' => 'Patna', 'text' => '₹499 mein jo plan mila wo ₹40k coaching se better tha.', 'stars' => 5],
+                ['name' => 'Rohit K.', 'exam' => 'IBPS PO', 'city' => 'Patna', 'text' => '₹99 mein jo plan mila wo ₹40k coaching se better tha.', 'stars' => 5],
                 ['name' => 'Anjali S.', 'exam' => 'RRB NTPC', 'city' => 'Jaipur', 'text' => 'PDF print karke follow kiya. Selection aa gaya!', 'stars' => 5],
                 ['name' => 'Vikram T.', 'exam' => 'MPPSC', 'city' => 'Bhopal', 'text' => '2 mahine mein Prelims mein rank aa gayi.', 'stars' => 5],
-                ['name' => 'Sunita D.', 'exam' => 'RRB Group D', 'city' => 'Varanasi', 'text' => '₹499 mein schedule mila, Group D clear ho gaya!', 'stars' => 5],
+                ['name' => 'Sunita D.', 'exam' => 'RRB Group D', 'city' => 'Varanasi', 'text' => '₹99 mein schedule mila, Group D clear ho gaya!', 'stars' => 5],
                 ['name' => 'Harpreet S.', 'exam' => 'SBI PO', 'city' => 'Chandigarh', 'text' => '3 baar fail hua tha, is baar result aaya.', 'stars' => 4],
             ];
             foreach ($mobileReviews as $r):
@@ -482,7 +482,7 @@ $schemaExtra = str_replace(
         <div class="text-center mt-8">
             <p class="text-navy-600 font-bold text-lg mb-4">Tension mat lo. <span class="text-saffron-500">Solution ready hai.</span></p>
             <a href="#get-blueprint" class="inline-flex items-center gap-2 px-8 py-3.5 bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition shadow-lg">
-                Abhi Blueprint Lo — ₹499
+                Abhi Blueprint Lo — ₹99
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
             </a>
         </div>
@@ -499,7 +499,7 @@ $schemaExtra = str_replace(
             <?php
             $steps = [
                 ['num' => '1', 'title' => 'Exam Select Karo', 'desc' => 'Naam, email aur exam choose karo. Bas.', 'time' => '30 sec', 'color' => 'saffron'],
-                ['num' => '2', 'title' => '₹499 Pay Karo', 'desc' => 'UPI, Card, Net Banking — jo pasand ho.', 'time' => '30 sec', 'color' => 'navy'],
+                ['num' => '2', 'title' => '₹99 Pay Karo', 'desc' => 'UPI, Card, Net Banking — jo pasand ho.', 'time' => '30 sec', 'color' => 'navy'],
                 ['num' => '3', 'title' => 'Blueprint Download', 'desc' => 'AI turant personalized PDF banata hai.', 'time' => '60 sec', 'color' => 'india'],
             ];
             foreach ($steps as $s):
@@ -564,13 +564,13 @@ $schemaExtra = str_replace(
     </div>
 </section>
 
-<!-- ========== COMPLETE COACHING SYSTEM — WHAT ₹499 GETS YOU ========== -->
+<!-- ========== COMPLETE COACHING SYSTEM — WHAT ₹99 GETS YOU ========== -->
 <section class="py-12 md:py-16 bg-white">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-3">
             <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-3 py-1 rounded-full mb-3">SIRF PDF NAHI — POORA COACHING SYSTEM</span>
-            <h2 class="font-display text-2xl md:text-3xl font-bold text-navy-600">₹499 Mein Aapko Kya Milta Hai</h2>
-            <p class="text-gray-500 text-sm mt-2">Coaching ₹50,000+ leti hai. Ye sab ₹499 mein — <strong class="text-navy-600">₹5,000+ ki value</strong></p>
+            <h2 class="font-display text-2xl md:text-3xl font-bold text-navy-600">₹99 Mein Aapko Kya Milta Hai</h2>
+            <p class="text-gray-500 text-sm mt-2">Coaching ₹50,000+ leti hai. Ye sab ₹99 mein — <strong class="text-navy-600">₹5,000+ ki value</strong></p>
         </div>
 
         <!-- Value breakdown with market price comparison -->
@@ -603,12 +603,12 @@ $schemaExtra = str_replace(
             <div class="relative">
                 <p class="text-gray-400 text-xs uppercase tracking-widest mb-2">Total Value</p>
                 <div class="flex items-center justify-center gap-4 flex-wrap">
-                    <span class="text-white/40 line-through text-2xl sm:text-3xl font-bold">₹4,500+</span>
-                    <span class="text-4xl sm:text-5xl font-black text-saffron-400">₹499</span>
+                    <span class="text-white/40 line-through text-2xl sm:text-3xl font-bold">₹900+</span>
+                    <span class="text-4xl sm:text-5xl font-black text-saffron-400">₹99</span>
                 </div>
                 <p class="text-gray-400 text-sm mt-2">One-time payment. No subscription. No hidden fees.</p>
                 <a href="#get-blueprint" class="inline-flex items-center gap-2 mt-4 px-8 py-3 bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition shadow-lg">
-                    Sab Chahiye — ₹499 Mein Lo
+                    Sab Chahiye — ₹99 Mein Lo
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
                 </a>
             </div>
@@ -654,7 +654,7 @@ $schemaExtra = str_replace(
                 <div class="text-center mb-4">
                     <span class="text-3xl">🎯</span>
                     <h3 class="font-bold text-india-700 text-lg mt-1">Sarkari Exam System</h3>
-                    <p class="text-india-600 font-black text-2xl">₹499 (one-time)</p>
+                    <p class="text-india-600 font-black text-2xl">₹99 (one-time)</p>
                 </div>
                 <ul class="space-y-2.5">
                     <?php foreach ([
@@ -686,7 +686,7 @@ $schemaExtra = str_replace(
             <?php endforeach; ?>
         </div>
         <a href="#get-blueprint" class="inline-flex items-center gap-2 px-8 py-3.5 bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition shadow-lg pulse-cta">
-            Apna Exam Choose Karo — ₹499
+            Apna Exam Choose Karo — ₹99
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
         </a>
     </div>
@@ -703,11 +703,11 @@ $schemaExtra = str_replace(
 
             <!-- Single Plan -->
             <div class="pricing-card bg-white border-2 border-gold-200 rounded-2xl p-6 cursor-pointer transition hover:border-saffron-400 hover:shadow-lg"
-                data-plan="single" data-price="499" onclick="selectPlan(this)">
+                data-plan="single" data-price="99" onclick="selectPlan(this)">
                 <div class="text-center mb-5">
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Starter</p>
                     <div class="flex items-end justify-center gap-1">
-                        <span class="text-4xl font-black text-navy-600">₹499</span>
+                        <span class="text-4xl font-black text-navy-600">₹99</span>
                     </div>
                     <p class="text-xs text-gray-400 mt-1">1 Exam ka Complete System</p>
                 </div>
@@ -728,23 +728,23 @@ $schemaExtra = str_replace(
                 </ul>
                 <a href="#get-blueprint" onclick="selectPlan(this.closest('.pricing-card'))"
                     class="block w-full py-3 text-center bg-gold-100 text-navy-600 rounded-xl font-bold hover:bg-saffron-500 hover:text-white transition text-sm">
-                    Starter — ₹499
+                    Starter — ₹99
                 </a>
             </div>
 
             <!-- Double Plan (POPULAR) -->
             <div class="pricing-card bg-white border-2 border-saffron-500 rounded-2xl p-6 cursor-pointer ring-4 ring-saffron-200 relative shadow-xl"
-                data-plan="double" data-price="799" onclick="selectPlan(this)">
+                data-plan="double" data-price="199" onclick="selectPlan(this)">
                 <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-saffron-500 text-white text-xs font-black px-4 py-1 rounded-full shadow tracking-widest uppercase">
                     BEST VALUE
                 </div>
                 <div class="text-center mb-5 mt-2">
                     <p class="text-xs font-bold text-saffron-600 uppercase tracking-widest mb-2">Pro</p>
                     <div class="flex items-end justify-center gap-2">
-                        <span class="text-4xl font-black text-navy-600">₹799</span>
-                        <span class="text-sm text-gray-400 line-through mb-1">₹998</span>
+                        <span class="text-4xl font-black text-navy-600">₹199</span>
+                        <span class="text-sm text-gray-400 line-through mb-1">₹198</span>
                     </div>
-                    <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-2 py-0.5 rounded-full mt-1">Save ₹199</span>
+                    <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-2 py-0.5 rounded-full mt-1">Save ₹99</span>
                     <p class="text-xs text-gray-400 mt-1">2 Exams ka Complete System</p>
                 </div>
                 <ul class="space-y-2 mb-6">
@@ -764,20 +764,20 @@ $schemaExtra = str_replace(
                 </ul>
                 <a href="#get-blueprint" onclick="selectPlan(this.closest('.pricing-card'))"
                     class="block w-full py-3 text-center bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition text-sm shadow-lg shadow-saffron-500/20">
-                    Pro — ₹799
+                    Pro — ₹199
                 </a>
             </div>
 
             <!-- Triple Plan -->
             <div class="pricing-card bg-white border-2 border-gold-200 rounded-2xl p-6 cursor-pointer transition hover:border-navy-400 hover:shadow-lg"
-                data-plan="triple" data-price="999" onclick="selectPlan(this)">
+                data-plan="triple" data-price="299" onclick="selectPlan(this)">
                 <div class="text-center mb-5">
                     <p class="text-xs font-bold text-navy-600 uppercase tracking-widest mb-2">Ultimate</p>
                     <div class="flex items-end justify-center gap-2">
-                        <span class="text-4xl font-black text-navy-600">₹999</span>
-                        <span class="text-sm text-gray-400 line-through mb-1">₹1,497</span>
+                        <span class="text-4xl font-black text-navy-600">₹299</span>
+                        <span class="text-sm text-gray-400 line-through mb-1">₹297</span>
                     </div>
-                    <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-2 py-0.5 rounded-full mt-1">Save ₹498</span>
+                    <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-2 py-0.5 rounded-full mt-1">Save ₹198</span>
                     <p class="text-xs text-gray-400 mt-1">3 Exams ka Complete System</p>
                 </div>
                 <ul class="space-y-2 mb-6">
@@ -797,7 +797,7 @@ $schemaExtra = str_replace(
                 </ul>
                 <a href="#get-blueprint" onclick="selectPlan(this.closest('.pricing-card'))"
                     class="block w-full py-3 text-center bg-navy-600 text-white rounded-xl font-bold hover:bg-navy-700 transition text-sm">
-                    Ultimate — ₹999
+                    Ultimate — ₹299
                 </a>
             </div>
         </div>
@@ -812,7 +812,7 @@ $schemaExtra = str_replace(
         <div class="space-y-3">
             <?php
             $faqs = [
-                ['q' => 'Ye kaise kaam karta hai?', 'a' => 'Simple hai: Naam + email + exam select karo → ₹499 pay karo → Apne weak subjects batao → 30 seconds mein AI aapka personalized 30-day PDF blueprint generate karega. Download karo aur follow karo.'],
+                ['q' => 'Ye kaise kaam karta hai?', 'a' => 'Simple hai: Naam + email + exam select karo → ₹99 pay karo → Apne weak subjects batao → 30 seconds mein AI aapka personalized 30-day PDF blueprint generate karega. Download karo aur follow karo.'],
                 ['q' => 'Kya ye sach mein personalized hota hai?', 'a' => 'Haan, 100%. AI aapki education, weak subjects, daily study hours, aur exam date ke hisaab se UNIQUE plan banata hai. Do students ka plan kabhi same nahi hoga. Ye generic PDF nahi hai.'],
                 ['q' => 'Turant milega ya wait karna padega?', 'a' => 'Payment ke baad 30-60 seconds mein aapka blueprint ready ho jayega. PDF turant download kar sakte ho. Koi wait nahi.'],
                 ['q' => 'Payment safe hai?', 'a' => 'Bilkul. Razorpay use hota hai — India ka #1 payment gateway. UPI, Paytm, Cards, Net Banking sab supported. Aapki payment details hamare paas store nahi hoti.'],
@@ -840,9 +840,9 @@ $schemaExtra = str_replace(
     </div>
     <div class="max-w-3xl mx-auto px-4 text-center relative">
         <h2 class="text-white font-display text-xl md:text-2xl font-bold mb-2">Har Din Exam Kareeb Aa Raha Hai</h2>
-        <p class="text-white/80 mb-5 text-sm">₹4,500+ ka complete coaching system sirf ₹499 mein. Aap kab shuru kar rahe ho?</p>
+        <p class="text-white/80 mb-5 text-sm">₹900+ ka complete coaching system sirf ₹99 mein. Aap kab shuru kar rahe ho?</p>
         <a href="#get-blueprint" class="inline-flex items-center gap-2 px-10 py-4 bg-white text-saffron-600 rounded-xl font-black text-lg hover:bg-gray-50 transition shadow-xl">
-            ₹499 — Complete System Lo
+            ₹99 — Complete System Lo
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
         </a>
         <p class="text-white/50 text-xs mt-3">7-din money back guarantee · Hyper-personalized · 22+ exams · PDF + Progress Tracker</p>
@@ -950,8 +950,8 @@ function selectExam(btn) {
 })();
 
 // Pricing card selection
-var planPriceMap = { single: '₹499', double: '₹799', triple: '₹999' };
-var planLabelMap = { single: '₹499 mein Blueprint Lo →', double: '₹799 mein 2 Blueprints Lo →', triple: '₹999 mein 3 Blueprints Lo →' };
+var planPriceMap = { single: '₹99', double: '₹199', triple: '₹299' };
+var planLabelMap = { single: '₹99 mein Blueprint Lo →', double: '₹199 mein 2 Blueprints Lo →', triple: '₹299 mein 3 Blueprints Lo →' };
 
 function selectPlan(card) {
     if (!card) return;

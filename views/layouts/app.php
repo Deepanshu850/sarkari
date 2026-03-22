@@ -1,6 +1,6 @@
 <?php
 $_seo_title = ($pageTitle ?? 'AI-Powered 30-Day Exam Blueprint') . ' | ' . APP_NAME;
-$_seo_desc = $pageDescription ?? 'Get your personalized 30-day study blueprint for Sarkari Naukri exams. AI-powered plan for SSC CGL, IBPS PO, RRB NTPC, UPSC & State PSC. Only ₹499.';
+$_seo_desc = $pageDescription ?? 'Get your personalized 30-day study blueprint for Sarkari Naukri exams. AI-powered plan for SSC CGL, IBPS PO, RRB NTPC, UPSC & State PSC. Only ₹99.';
 $_seo_url = base_url() . current_path();
 $_seo_canonical = rtrim($_seo_url, '/') ?: base_url();
 $_seo_image = base_url() . '/public/images/og-sarkari.png';
@@ -205,7 +205,7 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
                     <?php if (current_path() === '/' && !auth()): ?>
                         <!-- Landing page: minimal nav, no escape routes -->
                         <a href="#get-blueprint" class="px-5 py-2 bg-saffron-500 text-white rounded-lg text-sm font-bold hover:bg-saffron-600 transition shadow-lg shadow-saffron-500/20">
-                            Get Blueprint — ₹499
+                            Get Blueprint — ₹99
                         </a>
                     <?php elseif (auth()): ?>
                         <a href="/dashboard" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition <?= current_path() === '/dashboard' ? 'text-white bg-white/10' : '' ?>">My Blueprints</a>
@@ -273,7 +273,7 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
                     <?php endif; ?>
                     <a href="/logout" class="block px-4 py-2.5 rounded-lg text-red-400 hover:bg-white/10 font-medium">Logout</a>
                 <?php elseif (current_path() === '/'): ?>
-                    <a href="#get-blueprint" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="block px-4 py-2.5 rounded-lg bg-saffron-500 text-white font-bold text-center">Get Blueprint — ₹499</a>
+                    <a href="#get-blueprint" onclick="document.getElementById('mobileMenu').classList.add('hidden')" class="block px-4 py-2.5 rounded-lg bg-saffron-500 text-white font-bold text-center">Get Blueprint — ₹99</a>
                 <?php else: ?>
                     <a href="/login" class="block px-4 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 font-medium">Login</a>
                 <?php endif; ?>

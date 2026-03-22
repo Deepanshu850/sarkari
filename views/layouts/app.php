@@ -262,7 +262,12 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
         <div id="mobileMenu" class="hidden md:hidden border-t border-white/10">
             <div class="px-4 py-3 space-y-1">
                 <?php if (auth()): ?>
+                    <div class="px-4 py-2.5 border-b border-white/10 mb-1">
+                        <p class="text-white font-semibold text-sm"><?= e(auth()['name']) ?></p>
+                        <p class="text-gray-400 text-xs"><?= e(auth()['email']) ?> <?= plan_badge() ?></p>
+                    </div>
                     <a href="/dashboard" class="block px-4 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 font-medium">My Blueprints</a>
+                    <a href="/upgrade" class="block px-4 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 font-medium">Upgrade Plan</a>
                     <?php if (is_admin()): ?>
                         <a href="/admin" class="block px-4 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 font-medium">Admin</a>
                     <?php endif; ?>

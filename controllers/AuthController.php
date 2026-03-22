@@ -31,8 +31,11 @@ class AuthController extends Controller {
         if ($password !== $confirm) $errors[] = 'Passwords do not match.';
 
         $userModel = new User();
-        if ($userModel->findByEmail($email)) {
-            $errors[] = 'An account with this email already exists.';
+        $existingUser = $userModel->findByEmail($email);
+
+        if ($existingUser && $existingUser['email_verified']) {
+            // Fully registered user — can't register again
+            $errors[] = 'Is email se pehle se account hai. Login karein ya "Forgot Password" use karein.';
         }
 
         if ($errors) {
@@ -41,15 +44,28 @@ class AuthController extends Controller {
             redirect('/register');
         }
 
-        $userId = $userModel->create([
-            'name'          => $name,
-            'email'         => $email,
-            'phone'         => $phone ?: null,
-            'password_hash' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
-            'verify_token'  => bin2hex(random_bytes(32)),
-        ]);
-
-        $user = $userModel->find($userId);
+        if ($existingUser) {
+            // User was created via checkout (has random password, never verified)
+            // Let them set their real password now
+            $userModel->update($existingUser['id'], [
+                'name'           => $name,
+                'phone'          => $phone ?: $existingUser['phone'],
+                'password_hash'  => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
+                'email_verified' => 1,
+            ]);
+            $user = $userModel->find($existingUser['id']);
+        } else {
+            // Brand new user
+            $userId = $userModel->create([
+                'name'           => $name,
+                'email'          => $email,
+                'phone'          => $phone ?: null,
+                'password_hash'  => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
+                'email_verified' => 1,
+                'verify_token'   => bin2hex(random_bytes(32)),
+            ]);
+            $user = $userModel->find($userId);
+        }
         Auth::login($user);
 
         flash('success', 'Account created successfully! Welcome to Sarkari.');

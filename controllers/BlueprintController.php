@@ -309,19 +309,27 @@ class BlueprintController extends Controller {
         $studyHours = max(1, min(16, (float) ($_POST['study_hours'] ?? 4)));
         $examDate = $_POST['exam_date'] ?? date('Y-m-d', strtotime('+60 days'));
 
+        // Diagnostic answers for hyper-personalization
+        $diagnostic = [
+            'attempt_history' => $_POST['attempt_history'] ?? 'first_time',
+            'challenges'      => $_POST['challenges'] ?? [],
+            'study_situation' => $_POST['study_situation'] ?? 'full_time',
+            'study_style'     => $_POST['study_style'] ?? ['hindi', 'video'],
+        ];
+
         if (empty($weakSubjects)) {
-            // Pick first 3 subjects as defaults
             $examModel = new Exam();
             $allSubjects = $examModel->getSubjects($blueprint['exam_id']);
             $weakSubjects = array_slice(array_column($allSubjects, 'name'), 0, 3);
         }
 
         $blueprintModel->update((int) $id, [
-            'education'     => $education,
-            'weak_subjects' => json_encode(array_values($weakSubjects)),
-            'study_hours'   => $studyHours,
-            'exam_date'     => $examDate,
-            'status'        => 'generating',
+            'education'       => $education,
+            'weak_subjects'   => json_encode(array_values($weakSubjects)),
+            'diagnostic_json' => json_encode($diagnostic),
+            'study_hours'     => $studyHours,
+            'exam_date'       => $examDate,
+            'status'          => 'generating',
         ]);
 
         // Re-fetch with updated data

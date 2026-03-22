@@ -191,17 +191,12 @@ $schemaExtra = str_replace(
 );
 ?>
 
-<!-- FLOATING WHATSAPP SUPPORT BUTTON -->
-<a href="https://wa.me/919876543210" target="_blank" rel="noopener"
-    title="Help chahiye? WhatsApp karein"
-    class="fixed bottom-20 right-4 z-[60] flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-2xl hover:scale-110 transition-transform group lg:bottom-6">
-    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-        <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.763.459 3.418 1.265 4.862L2.05 21.95l5.236-1.193A9.956 9.956 0 0012.004 22C17.53 22 22 17.523 22 12.004 22 6.477 17.53 2 12.004 2zm0 18.17a8.155 8.155 0 01-4.158-1.138l-.298-.178-3.107.708.737-3.036-.196-.312A8.169 8.169 0 013.83 12.004c0-4.51 3.668-8.174 8.174-8.174 4.509 0 8.174 3.665 8.174 8.174 0 4.508-3.665 8.166-8.174 8.166z"/>
-    </svg>
-    <!-- Tooltip -->
+<!-- FLOATING EMAIL SUPPORT BUTTON -->
+<a href="mailto:help@sarkaariblueprint.in" title="Help chahiye? Email karein"
+    class="fixed bottom-20 right-4 z-[60] flex items-center justify-center w-14 h-14 bg-saffron-500 rounded-full shadow-2xl hover:scale-110 transition-transform group lg:bottom-6">
+    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
     <span class="absolute right-16 bg-gray-800 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
-        Help chahiye? WhatsApp karein
+        help@sarkaariblueprint.in
     </span>
 </a>
 
@@ -397,7 +392,7 @@ $schemaExtra = str_replace(
                                 <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                                 7-Din Money Back Guarantee — No questions asked
                             </p>
-                            <p class="text-india-600 text-[11px] mt-1">Refund ke liye: <a href="mailto:refund@sarkaariblueprint.in" class="underline font-semibold">refund@sarkaariblueprint.in</a></p>
+                            <p class="text-india-600 text-[11px] mt-1">Refund ke liye: <a href="mailto:help@sarkaariblueprint.in" class="underline font-semibold">help@sarkaariblueprint.in</a></p>
                         </div>
                     </form>
                 </div>
@@ -821,7 +816,7 @@ $schemaExtra = str_replace(
                 ['q' => 'Kya ye sach mein personalized hota hai?', 'a' => 'Haan, 100%. AI aapki education, weak subjects, daily study hours, aur exam date ke hisaab se UNIQUE plan banata hai. Do students ka plan kabhi same nahi hoga. Ye generic PDF nahi hai.'],
                 ['q' => 'Turant milega ya wait karna padega?', 'a' => 'Payment ke baad 30-60 seconds mein aapka blueprint ready ho jayega. PDF turant download kar sakte ho. Koi wait nahi.'],
                 ['q' => 'Payment safe hai?', 'a' => 'Bilkul. Razorpay use hota hai — India ka #1 payment gateway. UPI, Paytm, Cards, Net Banking sab supported. Aapki payment details hamare paas store nahi hoti.'],
-                ['q' => 'Agar pasand nahi aaya to?', 'a' => '<strong>7-din money back guarantee.</strong> Agar blueprint se koi help nahi mili, to 7 din ke andar full refund. No questions asked. Refund ke liye email karein: <a href="mailto:refund@sarkaariblueprint.in" class="text-saffron-600 font-semibold underline">refund@sarkaariblueprint.in</a> — paisa 3-5 working days mein vapas aa jayega.'],
+                ['q' => 'Agar pasand nahi aaya to?', 'a' => '<strong>7-din money back guarantee.</strong> Agar blueprint se koi help nahi mili, to 7 din ke andar full refund. No questions asked. Refund ke liye email karein: <a href="mailto:help@sarkaariblueprint.in" class="text-saffron-600 font-semibold underline">help@sarkaariblueprint.in</a> — paisa 3-5 working days mein vapas aa jayega.'],
                 ['q' => 'Kya coaching ki jagah ye use kar sakte hain?', 'a' => 'Bahut se toppers bina coaching ke, sirf sahi strategy follow karke select hue hain. Ye blueprint wo strategy deta hai. Agar coaching bhi kar rahe ho, to ye uske saath complement karega — daily plan milega.'],
             ];
             foreach ($faqs as $i => $faq):

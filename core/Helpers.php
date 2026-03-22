@@ -107,6 +107,41 @@ function blueprints_allowed(): int {
 /**
  * Get plan badge HTML
  */
+/**
+ * Get upgrade price from current plan to target plan (differential)
+ */
+function upgrade_price(string $targetPlan): int {
+    $currentPlan = user_plan();
+    $currentPrice = PLANS[$currentPlan]['price'] ?? 0;
+    $targetPrice = PLANS[$targetPlan]['price'] ?? 0;
+    return max(0, $targetPrice - $currentPrice);
+}
+
+/**
+ * Get all available upgrades for current user
+ */
+function available_upgrades(): array {
+    $currentPlan = user_plan();
+    $planRank = ['starter' => 1, 'pro' => 2, 'ultimate' => 3];
+    $currentRank = $planRank[$currentPlan] ?? 1;
+    $upgrades = [];
+
+    foreach (PLANS as $key => $plan) {
+        $rank = $planRank[$key] ?? 0;
+        if ($rank > $currentRank) {
+            $upgrades[$key] = [
+                'key' => $key,
+                'label' => $plan['label'],
+                'full_price' => $plan['price'],
+                'upgrade_price' => $plan['price'] - (PLANS[$currentPlan]['price'] ?? 0),
+                'blueprints' => $plan['blueprints'],
+                'features' => $plan['features'],
+            ];
+        }
+    }
+    return $upgrades;
+}
+
 function plan_badge(): string {
     $plan = user_plan();
     $label = PLANS[$plan]['label'] ?? 'Starter';

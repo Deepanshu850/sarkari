@@ -240,14 +240,16 @@ $schemaExtra = str_replace(
                     <span class="text-white font-semibold">95% aspirants fail</span> — direction nahi hoti. AI-powered <span class="text-saffron-400 font-semibold">30-day personalized blueprint</span> batayega — kya padhna hai, kitna padhna hai, kab padhna hai.
                 </p>
 
-                <!-- What's inside - compact on mobile, hidden partially -->
-                <div class="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+                <!-- What you get - not just a PDF, a complete system -->
+                <div class="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
                     <?php
                     $bullets = [
-                        'Har din ka timetable — topic + hours + resources',
-                        'Weak subjects pe 2x focus',
-                        'Revision cycle + Mock test schedule',
-                        'PDF download — print karo, follow karo',
+                        '30-day AI study plan — har din ka topic, hours, resources',
+                        'Progress tracker — daily ✓ mark karo, streak banao',
+                        'YouTube lectures + books + PYQ links — sab curated',
+                        'Mock test schedule — weekly practice + full simulation',
+                        'Phone pe app jaisa access — offline bhi padho',
+                        'Edit & regenerate — plan pasand nahi? Badlo free mein',
                     ];
                     foreach ($bullets as $b):
                     ?>
@@ -568,11 +570,67 @@ $schemaExtra = str_replace(
     </div>
 </section>
 
-<!-- ========== COACHING vs BLUEPRINT (mobile-friendly cards, not table) ========== -->
+<!-- ========== COMPLETE COACHING SYSTEM — WHAT ₹499 GETS YOU ========== -->
 <section class="py-12 md:py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-3">
+            <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-3 py-1 rounded-full mb-3">SIRF PDF NAHI — POORA COACHING SYSTEM</span>
+            <h2 class="font-display text-2xl md:text-3xl font-bold text-navy-600">₹499 Mein Aapko Kya Milta Hai</h2>
+            <p class="text-gray-500 text-sm mt-2">Coaching ₹50,000+ leti hai. Ye sab ₹499 mein — <strong class="text-navy-600">₹5,000+ ki value</strong></p>
+        </div>
+
+        <!-- Value breakdown with market price comparison -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+            <?php
+            $features = [
+                ['icon' => '🎯', 'title' => 'AI-Personalized 30-Day Plan', 'desc' => 'Aapke exam, weak subjects, study hours ke hisaab se UNIQUE plan. Do logon ka kabhi same nahi hoga.', 'worth' => '₹2,000'],
+                ['icon' => '📊', 'title' => 'Daily Progress Tracker', 'desc' => 'Har din ✓ mark karo, streak banao, progress ring dekhte jao. Motivation kabhi nahi giregi.', 'worth' => '₹500'],
+                ['icon' => '📚', 'title' => 'YouTube + Books + PYQ Links', 'desc' => 'Har topic ke liye best YouTube lectures, book chapters, aur previous year questions — sab curated.', 'worth' => '₹1,000'],
+                ['icon' => '📝', 'title' => 'Mock Test Schedule', 'desc' => 'Week 1: topic-wise → Week 2: section-wise → Week 3-4: full mock. Increasing difficulty, exam simulation.', 'worth' => '₹800'],
+                ['icon' => '🔄', 'title' => 'Edit & Regenerate Free', 'desc' => 'Plan pasand nahi aaya? Weak subjects change karo aur 7 din mein free regenerate karo. Unlimited tweaks.', 'worth' => '₹500'],
+                ['icon' => '📱', 'title' => 'App Jaisa Access + PDF', 'desc' => 'Phone pe install karo like app. Offline bhi padho. Plus premium PDF download — print karke wall pe lagao.', 'worth' => '₹300'],
+                ['icon' => '📅', 'title' => 'Exam Countdown Dashboard', 'desc' => '"X din baaki hai" — har din yaad dilayega. Aaj ka plan dikhayega. Lazy feel nahi hone dega.', 'worth' => '₹200'],
+                ['icon' => '🔥', 'title' => 'Streak & Consistency Score', 'desc' => '21 din consecutive padhe? Badge milega. Friends ke saath share karo. Accountability built-in.', 'worth' => '₹200'],
+                ['icon' => '🎁', 'title' => 'Refer & Earn ₹100 Off', 'desc' => 'Dost ko recommend karo. Jab wo buy kare, aapko ₹100 off milega next blueprint pe. Unlimited referrals.', 'worth' => 'BONUS'],
+            ];
+            foreach ($features as $f):
+            ?>
+            <div class="bg-cream border border-gold-200 rounded-xl p-4 hover:border-saffron-400 hover:shadow-md transition relative group">
+                <div class="absolute top-3 right-3 bg-india-50 text-india-700 text-[10px] font-bold px-2 py-0.5 rounded border border-india-200">Worth <?= $f['worth'] ?></div>
+                <span class="text-2xl"><?= $f['icon'] ?></span>
+                <h3 class="font-bold text-navy-600 text-sm mt-2 mb-1 pr-16"><?= $f['title'] ?></h3>
+                <p class="text-gray-500 text-xs leading-relaxed"><?= $f['desc'] ?></p>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Total value banner -->
+        <div class="mt-8 bg-gradient-to-r from-navy-600 to-navy-800 rounded-2xl p-5 sm:p-6 text-center relative overflow-hidden">
+            <div class="absolute inset-0 opacity-5">
+                <svg class="w-full h-full" viewBox="0 0 100 100"><pattern id="vp" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="0.7" fill="white"/></pattern><rect width="100" height="100" fill="url(#vp)"/></svg>
+            </div>
+            <div class="relative">
+                <p class="text-gray-400 text-xs uppercase tracking-widest mb-2">Total Value</p>
+                <div class="flex items-center justify-center gap-4 flex-wrap">
+                    <span class="text-white/40 line-through text-2xl sm:text-3xl font-bold">₹5,500+</span>
+                    <span class="text-4xl sm:text-5xl font-black text-saffron-400">₹499</span>
+                </div>
+                <p class="text-gray-400 text-sm mt-2">One-time payment. No subscription. No hidden fees.</p>
+                <a href="#get-blueprint" class="inline-flex items-center gap-2 mt-4 px-8 py-3 bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition shadow-lg">
+                    Sab Chahiye — ₹499 Mein Lo
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== COACHING vs SARKARI SYSTEM ========== -->
+<section class="py-12 md:py-16 bg-cream">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8">
-            <h2 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Coaching Class vs Sarkari Blueprint</h2>
+            <h2 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Coaching Class vs Sarkari System</h2>
+            <p class="text-gray-500 text-sm mt-1">Apne aap compare karo — kya sach mein ₹50,000 zaroori hai?</p>
         </div>
         <div class="grid md:grid-cols-2 gap-5">
             <!-- Coaching = Bad -->
@@ -583,7 +641,15 @@ $schemaExtra = str_replace(
                     <p class="text-red-600 font-black text-2xl">₹30,000 - ₹80,000</p>
                 </div>
                 <ul class="space-y-2.5">
-                    <?php foreach (['Generic batch — sab ke liye same', 'Aapki weakness pe koi focus nahi', 'Daily schedule nahi dete', '6 months ka time lagta hai', 'Travel + books ka extra kharcha'] as $x): ?>
+                    <?php foreach ([
+                        'Generic batch — sab ke liye same plan',
+                        'Aapki weakness pe koi focus nahi',
+                        'Daily schedule nahi dete — khud plan banao',
+                        'Progress track nahi hota — pata nahi kitna padha',
+                        'Books/resources khud dhundho',
+                        'Travel + books ka extra ₹10,000+ kharcha',
+                        'Ek baar chhoot gaya to catch-up nahi',
+                    ] as $x): ?>
                     <li class="flex items-start gap-2 text-sm text-red-800">
                         <svg class="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                         <?= $x ?>
@@ -591,16 +657,24 @@ $schemaExtra = str_replace(
                     <?php endforeach; ?>
                 </ul>
             </div>
-            <!-- Blueprint = Good -->
+            <!-- Sarkari System = Good -->
             <div class="bg-india-50 border-2 border-india-300 rounded-xl p-5 ring-2 ring-india-200 relative">
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-india-500 text-white text-xs font-bold px-3 py-0.5 rounded-full">RECOMMENDED</div>
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-india-500 text-white text-xs font-bold px-3 py-0.5 rounded-full">91% CHEAPER</div>
                 <div class="text-center mb-4">
                     <span class="text-3xl">🎯</span>
-                    <h3 class="font-bold text-india-700 text-lg mt-1">Sarkari Blueprint</h3>
+                    <h3 class="font-bold text-india-700 text-lg mt-1">Sarkari Exam System</h3>
                     <p class="text-india-600 font-black text-2xl">₹499 (one-time)</p>
                 </div>
                 <ul class="space-y-2.5">
-                    <?php foreach (['100% personalized — sirf AAPKE liye', 'AI se weak areas pe 2x focus', 'Har din ka timetable with resources', '30 seconds mein ready — turant start karo', 'Ghar baithe, phone se sab hoga'] as $x): ?>
+                    <?php foreach ([
+                        '100% personalized — sirf AAPKE liye AI banata hai',
+                        'Weak subjects pe 2x focus — AI samajhta hai',
+                        'Har din ka timetable — kya padhna, kitne hours',
+                        'Progress tracker — ✓ mark karo, streak banao',
+                        'YouTube + Books + PYQ links — sab curated',
+                        'Phone pe app — offline bhi padho, kabhi bhi',
+                        'Plan pasand nahi? Free mein regenerate karo',
+                    ] as $x): ?>
                     <li class="flex items-start gap-2 text-sm text-india-800">
                         <svg class="w-4 h-4 text-india-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                         <?= $x ?>
@@ -632,8 +706,8 @@ $schemaExtra = str_replace(
 <section class="py-12 md:py-16 bg-parchment" id="pricing">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-10">
-            <h2 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Choose Your Plan</h2>
-            <p class="text-gray-500 text-sm mt-2">Ek se zyada exams ki taiyari? Bundle mein aur savings!</p>
+            <h2 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Apna Plan Chuno</h2>
+            <p class="text-gray-500 text-sm mt-2">Ek exam ya multiple — sab mein complete coaching system milta hai</p>
         </div>
         <div class="grid md:grid-cols-3 gap-6 items-start">
 
@@ -641,53 +715,68 @@ $schemaExtra = str_replace(
             <div class="pricing-card bg-white border-2 border-gold-200 rounded-2xl p-6 cursor-pointer transition hover:border-saffron-400 hover:shadow-lg"
                 data-plan="single" data-price="499" onclick="selectPlan(this)">
                 <div class="text-center mb-5">
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Single</p>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Starter</p>
                     <div class="flex items-end justify-center gap-1">
                         <span class="text-4xl font-black text-navy-600">₹499</span>
                     </div>
-                    <p class="text-xs text-gray-400 mt-1">1 Blueprint</p>
+                    <p class="text-xs text-gray-400 mt-1">1 Exam ka Complete System</p>
                 </div>
-                <ul class="space-y-2.5 mb-6">
-                    <?php foreach (['1 Personalized Blueprint', '30-day study plan', 'PDF download', '7-day money-back guarantee'] as $f): ?>
-                    <li class="flex items-center gap-2 text-sm text-gray-700">
-                        <svg class="w-4 h-4 text-india-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <ul class="space-y-2 mb-6">
+                    <?php foreach ([
+                        'AI-personalized 30-day plan',
+                        'Progress tracker + streaks',
+                        'YouTube + Book + PYQ links',
+                        'Mock test schedule',
+                        'Premium PDF download',
+                        'App access (offline bhi)',
+                        '7-day money-back guarantee',
+                    ] as $f): ?>
+                    <li class="flex items-center gap-2 text-xs text-gray-700">
+                        <svg class="w-3.5 h-3.5 text-india-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                         <?= $f ?>
                     </li>
                     <?php endforeach; ?>
                 </ul>
                 <a href="#get-blueprint" onclick="selectPlan(this.closest('.pricing-card'))"
                     class="block w-full py-3 text-center bg-gold-100 text-navy-600 rounded-xl font-bold hover:bg-saffron-500 hover:text-white transition text-sm">
-                    Get Single — ₹499
+                    Starter — ₹499
                 </a>
             </div>
 
             <!-- Double Plan (POPULAR) -->
             <div class="pricing-card bg-white border-2 border-saffron-500 rounded-2xl p-6 cursor-pointer ring-4 ring-saffron-200 relative shadow-xl"
                 data-plan="double" data-price="799" onclick="selectPlan(this)">
-                <!-- Popular badge -->
                 <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-saffron-500 text-white text-xs font-black px-4 py-1 rounded-full shadow tracking-widest uppercase">
-                    POPULAR
+                    BEST VALUE
                 </div>
                 <div class="text-center mb-5 mt-2">
-                    <p class="text-xs font-bold text-saffron-600 uppercase tracking-widest mb-2">Double</p>
+                    <p class="text-xs font-bold text-saffron-600 uppercase tracking-widest mb-2">Pro</p>
                     <div class="flex items-end justify-center gap-2">
                         <span class="text-4xl font-black text-navy-600">₹799</span>
                         <span class="text-sm text-gray-400 line-through mb-1">₹998</span>
                     </div>
                     <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-2 py-0.5 rounded-full mt-1">Save ₹199</span>
-                    <p class="text-xs text-gray-400 mt-1">2 Blueprints</p>
+                    <p class="text-xs text-gray-400 mt-1">2 Exams ka Complete System</p>
                 </div>
-                <ul class="space-y-2.5 mb-6">
-                    <?php foreach (['2 Personalized Blueprints', '30-day plan each', 'PDF download', '7-day money-back guarantee', 'Priority generation'] as $f): ?>
-                    <li class="flex items-center gap-2 text-sm text-gray-700">
-                        <svg class="w-4 h-4 text-saffron-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <ul class="space-y-2 mb-6">
+                    <?php foreach ([
+                        'Sab kuch jo Starter mein hai',
+                        '2 AI-personalized blueprints',
+                        'Edit & regenerate free (7 din)',
+                        'Priority AI generation',
+                        'Exam countdown dashboard',
+                        'Referral rewards (₹100 off)',
+                        'SSC + Banking combo ke liye perfect',
+                    ] as $f): ?>
+                    <li class="flex items-center gap-2 text-xs text-gray-700">
+                        <svg class="w-3.5 h-3.5 text-saffron-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                         <?= $f ?>
                     </li>
                     <?php endforeach; ?>
                 </ul>
                 <a href="#get-blueprint" onclick="selectPlan(this.closest('.pricing-card'))"
                     class="block w-full py-3 text-center bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition text-sm shadow-lg shadow-saffron-500/20">
-                    Get Double — ₹799
+                    Pro — ₹799
                 </a>
             </div>
 
@@ -695,29 +784,37 @@ $schemaExtra = str_replace(
             <div class="pricing-card bg-white border-2 border-gold-200 rounded-2xl p-6 cursor-pointer transition hover:border-navy-400 hover:shadow-lg"
                 data-plan="triple" data-price="999" onclick="selectPlan(this)">
                 <div class="text-center mb-5">
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Triple</p>
+                    <p class="text-xs font-bold text-navy-600 uppercase tracking-widest mb-2">Ultimate</p>
                     <div class="flex items-end justify-center gap-2">
                         <span class="text-4xl font-black text-navy-600">₹999</span>
-                        <span class="text-sm text-gray-400 line-through mb-1">₹1497</span>
+                        <span class="text-sm text-gray-400 line-through mb-1">₹1,497</span>
                     </div>
                     <span class="inline-block bg-india-50 text-india-700 border border-india-200 text-xs font-bold px-2 py-0.5 rounded-full mt-1">Save ₹498</span>
-                    <p class="text-xs text-gray-400 mt-1">3 Blueprints</p>
+                    <p class="text-xs text-gray-400 mt-1">3 Exams ka Complete System</p>
                 </div>
-                <ul class="space-y-2.5 mb-6">
-                    <?php foreach (['3 Personalized Blueprints', '30-day plan each', 'PDF download', '7-day money-back guarantee', 'Priority generation', 'Lifetime access'] as $f): ?>
-                    <li class="flex items-center gap-2 text-sm text-gray-700">
-                        <svg class="w-4 h-4 text-india-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <ul class="space-y-2 mb-6">
+                    <?php foreach ([
+                        'Sab kuch jo Pro mein hai',
+                        '3 AI-personalized blueprints',
+                        'Unlimited regenerations',
+                        'Lifetime access to all plans',
+                        'Future updates free mein',
+                        'SSC + Banking + Railway combo',
+                        'Serious aspirants ke liye',
+                    ] as $f): ?>
+                    <li class="flex items-center gap-2 text-xs text-gray-700">
+                        <svg class="w-3.5 h-3.5 text-india-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                         <?= $f ?>
                     </li>
                     <?php endforeach; ?>
                 </ul>
                 <a href="#get-blueprint" onclick="selectPlan(this.closest('.pricing-card'))"
                     class="block w-full py-3 text-center bg-navy-600 text-white rounded-xl font-bold hover:bg-navy-700 transition text-sm">
-                    Get Triple — ₹999
+                    Ultimate — ₹999
                 </a>
             </div>
         </div>
-        <p class="text-center text-xs text-gray-400 mt-6">All plans include 7-day money-back guarantee · Razorpay secure payment</p>
+        <p class="text-center text-xs text-gray-400 mt-6">Sabhi plans mein 7-day money-back guarantee · Razorpay secure payment · Instant delivery</p>
     </div>
 </section>
 
@@ -756,12 +853,12 @@ $schemaExtra = str_replace(
     </div>
     <div class="max-w-3xl mx-auto px-4 text-center relative">
         <h2 class="text-white font-display text-xl md:text-2xl font-bold mb-2">Har Din Exam Kareeb Aa Raha Hai</h2>
-        <p class="text-white/80 mb-5 text-sm">Jo aaj plan banayega, wahi kal select hoga. Aap kab shuru kar rahe ho?</p>
+        <p class="text-white/80 mb-5 text-sm">₹5,500+ ka complete coaching system sirf ₹499 mein. Aap kab shuru kar rahe ho?</p>
         <a href="#get-blueprint" class="inline-flex items-center gap-2 px-10 py-4 bg-white text-saffron-600 rounded-xl font-black text-lg hover:bg-gray-50 transition shadow-xl">
-            ₹499 — Abhi Blueprint Lo
+            ₹499 — Complete System Lo
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
         </a>
-        <p class="text-white/50 text-xs mt-3">7-din money back guarantee · Instant PDF delivery · 22+ exams</p>
+        <p class="text-white/50 text-xs mt-3">7-din money back guarantee · Complete coaching system · 22+ exams · App + PDF + Progress Tracker</p>
     </div>
 </section>
 

@@ -3,17 +3,16 @@
         <!-- Progress Bar -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-bold text-saffron-600 tracking-wider uppercase">Step 2 of 4</span>
+                <span class="text-sm font-bold text-saffron-600 tracking-wider uppercase">Step 2 of 3</span>
                 <span class="text-sm text-gray-500">Your Background</span>
             </div>
             <div class="w-full bg-gold-100 rounded-full h-2.5">
-                <div class="bg-saffron-500 h-2.5 rounded-full transition-all shadow-sm" style="width: 50%"></div>
+                <div class="bg-saffron-500 h-2.5 rounded-full transition-all shadow-sm" style="width: 66%"></div>
             </div>
             <div class="flex justify-between mt-2">
                 <span class="text-[10px] text-india-500 font-bold">EXAM &#10003;</span>
                 <span class="text-[10px] text-saffron-500 font-bold">BACKGROUND</span>
-                <span class="text-[10px] text-gray-400">SCHEDULE</span>
-                <span class="text-[10px] text-gray-400">REVIEW</span>
+                <span class="text-[10px] text-gray-400">GENERATE</span>
             </div>
         </div>
 

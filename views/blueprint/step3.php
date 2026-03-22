@@ -3,17 +3,16 @@
         <!-- Progress Bar -->
         <div class="mb-8">
             <div class="flex items-center justify-between mb-3">
-                <span class="text-sm font-bold text-saffron-600 tracking-wider uppercase">Step 3 of 4</span>
+                <span class="text-sm font-bold text-saffron-600 tracking-wider uppercase">Step 3 of 3</span>
                 <span class="text-sm text-gray-500">Study Schedule</span>
             </div>
             <div class="w-full bg-gold-100 rounded-full h-2.5">
-                <div class="bg-saffron-500 h-2.5 rounded-full transition-all shadow-sm" style="width: 75%"></div>
+                <div class="bg-saffron-500 h-2.5 rounded-full transition-all shadow-sm" style="width: 100%"></div>
             </div>
             <div class="flex justify-between mt-2">
                 <span class="text-[10px] text-india-500 font-bold">EXAM &#10003;</span>
                 <span class="text-[10px] text-india-500 font-bold">BACKGROUND &#10003;</span>
                 <span class="text-[10px] text-saffron-500 font-bold">SCHEDULE</span>
-                <span class="text-[10px] text-gray-400">REVIEW</span>
             </div>
         </div>
 
@@ -73,8 +72,8 @@
                 </a>
                 <button type="submit"
                     class="px-8 py-3 bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition shadow-lg shadow-saffron-500/20 flex items-center gap-2">
-                    Review & Pay
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    Blueprint Generate Karo
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </button>
             </div>
         </form>

@@ -66,6 +66,7 @@ require_once __DIR__ . '/models/Payment.php';
 require_once __DIR__ . '/services/AIService.php';
 require_once __DIR__ . '/services/RazorpayService.php';
 require_once __DIR__ . '/services/PdfService.php';
+require_once __DIR__ . '/services/MailService.php';
 
 // Controllers
 require_once __DIR__ . '/controllers/HomeController.php';

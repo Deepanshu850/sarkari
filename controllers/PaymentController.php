@@ -428,8 +428,23 @@ class PaymentController extends Controller {
                 'generated_at' => date('Y-m-d H:i:s'),
             ]);
 
+            // Send blueprint PDF to user's email
+            $emailSent = false;
+            try {
+                $fullPdfPath = STORAGE_PATH . '/pdfs/' . basename($pdfPath);
+                $freshBlueprint = $blueprintModel->getWithExam($blueprintId);
+                $mailService = new \App\Services\MailService();
+                $emailSent = $mailService->sendBlueprintEmail($user, $freshBlueprint, $fullPdfPath);
+            } catch (\Exception $e) {
+                error_log("Email send failed for blueprint #{$blueprintId}: " . $e->getMessage());
+            }
+
             unset($_SESSION['blueprint_draft']);
-            flash('success', 'Aapka blueprint ready hai! Download karein.');
+            if ($emailSent) {
+                flash('success', 'Aapka blueprint ready hai! PDF aapke email pe bhi bhej diya gaya hai.');
+            } else {
+                flash('success', 'Aapka blueprint ready hai! Download karein.');
+            }
             redirect('/blueprint/view/' . $blueprintId);
         } catch (\Exception $e) {
             $blueprintModel->update($blueprintId, ['status' => 'failed']);

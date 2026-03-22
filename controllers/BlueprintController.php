@@ -114,7 +114,113 @@ class BlueprintController extends Controller {
         $draft['study_hours'] = $studyHours;
         $draft['exam_date'] = $examDate;
         $_SESSION['blueprint_draft'] = $draft;
-        redirect('/blueprint/review');
+
+        // Check if user has remaining blueprint credits
+        $blueprintModel = new Blueprint();
+        $readyCount = $blueprintModel->countByStatus(\App\Core\Auth::id(), 'ready');
+        $allowed = blueprints_allowed();
+
+        if ($readyCount < $allowed) {
+            redirect('/blueprint/generate');
+        } else {
+            redirect('/blueprint/review');
+        }
+    }
+
+    /**
+     * GET /blueprint/generate
+     * Creates blueprint from draft and shows generating page.
+     * Generation happens via AJAX to avoid timeout.
+     */
+    public function generate(): void {
+        $this->requireAuth();
+
+        $draft = $_SESSION['blueprint_draft'] ?? null;
+        if (!$draft || !isset($draft['exam_date'])) {
+            redirect('/blueprint/step1');
+            return;
+        }
+
+        // Verify credits
+        $blueprintModel = new Blueprint();
+        $readyCount = $blueprintModel->countByStatus(\App\Core\Auth::id(), 'ready');
+        if ($readyCount >= blueprints_allowed()) {
+            flash('error', 'Blueprint limit reached. Upgrade your plan.');
+            redirect('/dashboard');
+            return;
+        }
+
+        // Create blueprint record
+        $blueprintId = $blueprintModel->create([
+            'user_id'       => \App\Core\Auth::id(),
+            'exam_id'       => $draft['exam_id'],
+            'education'     => $draft['education'],
+            'weak_subjects' => json_encode($draft['weak_subjects']),
+            'study_hours'   => $draft['study_hours'],
+            'exam_date'     => $draft['exam_date'],
+            'status'        => 'generating',
+        ]);
+
+        unset($_SESSION['blueprint_draft']);
+
+        // Show generating page — generation will happen via AJAX
+        $blueprint = $blueprintModel->getWithExam($blueprintId);
+        $this->view('blueprint/generating', [
+            'pageTitle' => 'Generating Your Blueprint...',
+            'blueprint' => $blueprint,
+            'blueprintId' => $blueprintId,
+        ]);
+    }
+
+    /**
+     * POST /api/blueprint/generate/{id}
+     * AJAX endpoint — actually runs AI generation. Called from the generating page.
+     */
+    public function doGenerate(string $id): void {
+        $this->requireAuth();
+
+        $blueprintModel = new Blueprint();
+        $blueprint = $blueprintModel->getWithExam((int) $id);
+
+        if (!$blueprint || (int)$blueprint['user_id'] !== \App\Core\Auth::id()) {
+            json_response(['error' => 'Not found'], 404);
+            return;
+        }
+
+        if ($blueprint['status'] === 'ready') {
+            json_response(['status' => 'ready', 'redirect' => '/blueprint/view/' . $id]);
+            return;
+        }
+
+        if ($blueprint['status'] !== 'generating') {
+            json_response(['error' => 'Invalid status'], 400);
+            return;
+        }
+
+        // Run generation
+        $paymentController = new \App\Controllers\PaymentController();
+        $paymentController->generateAndFinalize((int) $id, $blueprint, $blueprintModel);
+    }
+
+    /**
+     * GET /api/blueprint/status/{id}
+     * AJAX poll endpoint — returns current blueprint status.
+     */
+    public function checkStatus(string $id): void {
+        $this->requireAuth();
+
+        $blueprintModel = new Blueprint();
+        $blueprint = $blueprintModel->find((int) $id);
+
+        if (!$blueprint || (int)$blueprint['user_id'] !== \App\Core\Auth::id()) {
+            json_response(['error' => 'Not found'], 404);
+            return;
+        }
+
+        json_response([
+            'status' => $blueprint['status'],
+            'redirect' => $blueprint['status'] === 'ready' ? '/blueprint/view/' . $id : null,
+        ]);
     }
 
     public function review(): void {
@@ -124,7 +230,7 @@ class BlueprintController extends Controller {
             redirect('/blueprint/step3');
         }
         $this->view('blueprint/review', [
-            'pageTitle' => 'Review & Pay',
+            'pageTitle' => 'Upgrade Plan',
             'draft' => $draft,
         ]);
     }

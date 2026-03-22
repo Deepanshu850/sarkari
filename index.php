@@ -119,12 +119,15 @@ $router->post('/blueprint/step2', [\App\Controllers\BlueprintController::class, 
 $router->get('/blueprint/step3', [\App\Controllers\BlueprintController::class, 'step3']);
 $router->post('/blueprint/step3', [\App\Controllers\BlueprintController::class, 'saveStep3']);
 $router->get('/blueprint/review', [\App\Controllers\BlueprintController::class, 'review']);
+$router->get('/blueprint/generate', [\App\Controllers\BlueprintController::class, 'generate']);
 $router->post('/payment/initiate', [\App\Controllers\PaymentController::class, 'initiate']);
 
 // API
 $router->get('/api/exam-subjects/{id}', [\App\Controllers\BlueprintController::class, 'getSubjects']);
 $router->post('/api/progress/toggle', [\App\Controllers\BlueprintController::class, 'toggleProgress']);
 $router->post('/api/result/submit', [\App\Controllers\BlueprintController::class, 'submitResult']);
+$router->post('/api/blueprint/generate/{id}', [\App\Controllers\BlueprintController::class, 'doGenerate']);
+$router->get('/api/blueprint/status/{id}', [\App\Controllers\BlueprintController::class, 'checkStatus']);
 
 // PDF
 $router->get('/blueprint/download/{id}', [\App\Controllers\PdfController::class, 'download']);

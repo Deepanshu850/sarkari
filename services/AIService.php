@@ -203,6 +203,61 @@ INST;
         return $this->phaseEnd($planDays, $phase - 1) + 1;
     }
 
+    private function buildDiagnosticContext(array $diagnostic): string {
+        $context = '';
+
+        // Attempt history
+        $attempts = [
+            'first_time' => 'This is their FIRST attempt. They are a complete beginner with no exam experience. Focus on building strong fundamentals. Don\'t assume prior knowledge. Include "how to approach exam hall" tips.',
+            'attempted_once' => 'They attempted this exam ONCE before and did not qualify. They have basic knowledge but need targeted improvement. Identify common failure patterns and address them. Include "what to do differently this time" strategies.',
+            'attempted_multiple' => 'They have attempted this exam 2+ times without success. They likely have knowledge gaps they\'re unaware of. Focus on DIAGNOSIS: include self-assessment tests, error pattern analysis, and targeted weakness correction. Avoid repeating generic advice they\'ve probably heard before.',
+            'prelims_cleared' => 'They have already CLEARED Prelims and are preparing for Mains. They have strong basics. Focus entirely on Mains strategy: answer writing practice, time management in descriptive papers, depth over breadth.',
+        ];
+        $context .= "**Attempt History:** " . ($attempts[$diagnostic['attempt_history'] ?? 'first_time'] ?? $attempts['first_time']) . "\n\n";
+
+        // Challenges
+        $challengeMap = [
+            'no_direction' => 'LACKS DIRECTION: Doesn\'t know where to start. Blueprint must have crystal-clear "do this first, then this" sequencing. No ambiguity. Each day should feel like following a GPS.',
+            'consistency' => 'CONSISTENCY PROBLEM: Cannot study regularly. Include SHORT daily sessions (even 30-min "minimum viable" targets on low-motivation days). Add accountability checkpoints. Suggest "2-minute rule" to start studying.',
+            'speed' => 'SPEED/TIME MANAGEMENT ISSUE: Runs out of time in exam. Include TIMED practice daily (stopwatch drills). Add speed-building techniques specific to each subject. Include "questions per minute" targets.',
+            'revision' => 'REVISION/RETENTION PROBLEM: Forgets what they studied. Use spaced repetition schedule. Include revision mini-sessions at START of each day (15 min reviewing yesterday). Add weekly cumulative revision.',
+            'mocks' => 'MOCK TEST ANXIETY: Low scores in mocks. Start with topic-wise mocks (less overwhelming). Build up to section mocks. Full mocks only in last week. Include post-mock analysis routine.',
+            'resources' => 'RESOURCE CONFUSION: Doesn\'t know what to study from. Be VERY SPECIFIC with resource recommendations. Name exact books, chapters, YouTube video titles. Don\'t say "any good book" — name THE book.',
+        ];
+        $challenges = $diagnostic['challenges'] ?? [];
+        if (!empty($challenges)) {
+            $context .= "**Key Challenges (MUST address in blueprint):**\n";
+            foreach ($challenges as $c) {
+                if (isset($challengeMap[$c])) {
+                    $context .= "- " . $challengeMap[$c] . "\n";
+                }
+            }
+            $context .= "\n";
+        }
+
+        // Study situation
+        $situations = [
+            'full_time' => 'FULL-TIME student. Can dedicate entire day to preparation. Structure like a school day with subject blocks, breaks, and evening revision.',
+            'working' => 'WORKING PROFESSIONAL with limited time. Every minute counts. Focus on high-yield topics only. Include "commute study" suggestions (audio/podcast). Morning and night study splits. Weekend intensive sessions.',
+            'college' => 'COLLEGE STUDENT balancing academics. Study plan should work AROUND college hours. Include weekend catch-up slots. Suggest how to integrate exam prep with college curriculum where overlap exists.',
+            'coaching' => 'Already in COACHING. This blueprint should COMPLEMENT coaching, not replace it. Focus on self-study portions coaching doesn\'t cover. Include "coaching homework" time. Add extra practice beyond what coaching provides.',
+        ];
+        $context .= "**Study Situation:** " . ($situations[$diagnostic['study_situation'] ?? 'full_time'] ?? $situations['full_time']) . "\n\n";
+
+        // Study style
+        $styles = $diagnostic['study_style'] ?? ['hindi', 'video'];
+        $styleNotes = [];
+        if (in_array('hindi', $styles)) $styleNotes[] = 'Prefer HINDI medium resources. Suggest Hindi YouTube channels (e.g., Exampur, Khan Sir Patna, Study91) and Hindi-medium books.';
+        if (in_array('english', $styles)) $styleNotes[] = 'Prefer ENGLISH medium resources. Suggest English channels (Unacademy, Adda247 English) and English-medium books.';
+        if (in_array('video', $styles)) $styleNotes[] = 'VISUAL LEARNER — prefers video lectures. Prioritize YouTube and online course recommendations over books. Include specific video links/playlist names.';
+        if (in_array('books', $styles)) $styleNotes[] = 'BOOK LEARNER — prefers reading. Prioritize specific book + chapter recommendations. Include page ranges where possible.';
+        if (!empty($styleNotes)) {
+            $context .= "**Learning Preferences:**\n- " . implode("\n- ", $styleNotes) . "\n\n";
+        }
+
+        return $context;
+    }
+
     private function buildPrompt(array $exam, array $blueprint, array $weakSubjects, array $syllabus, int $planDays): string {
         $subjectsList  = implode(', ', $weakSubjects);
         $syllabusStr   = json_encode($syllabus, JSON_PRETTY_PRINT);
@@ -212,10 +267,16 @@ INST;
         $examStrategy  = $this->getExamStrategy($examCategory, $examName);
         $modeInstructions = $this->getPrepModeInstructions($planDays);
 
-        return <<<PROMPT
-You are an expert Indian government exam preparation coach with 20+ years of experience coaching students for competitive exams including SSC, Banking, Railway, UPSC, and State PSCs.
+        // Diagnostic context for hyper-personalization
+        $diagnostic = json_decode($blueprint['diagnostic_json'] ?? '{}', true) ?: [];
+        $diagnosticContext = !empty($diagnostic) ? $this->buildDiagnosticContext($diagnostic) : '';
 
-Generate a personalized {$planDays}-day study blueprint for the following student:
+        return <<<PROMPT
+You are an expert Indian government exam preparation coach with 20+ years of experience. You have coached 10,000+ students for SSC, Banking, Railway, UPSC, and State PSC exams.
+
+Your task: Generate a HYPER-PERSONALIZED {$planDays}-day study blueprint. This is NOT a generic plan — it must directly address THIS student's specific problems, history, and situation.
+
+═══ STUDENT PROFILE ═══
 
 **Target Exam:** {$examName} ({$examCategory})
 **Exam Syllabus:** {$syllabusStr}
@@ -224,6 +285,10 @@ Generate a personalized {$planDays}-day study blueprint for the following studen
 **Available Study Hours Per Day:** {$blueprint['study_hours']}
 **Days Until Exam:** {$planDays}
 **Preparation Mode:** {$prepMode}
+
+═══ DIAGNOSTIC ANALYSIS (CRITICAL — PERSONALIZE BASED ON THIS) ═══
+
+{$diagnosticContext}
 
 ---
 

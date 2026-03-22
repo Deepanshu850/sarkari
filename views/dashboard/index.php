@@ -6,15 +6,29 @@
                     <h1 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Mere Blueprints</h1>
                     <?= plan_badge() ?>
                 </div>
+                <?php
+                    $readyCount = 0;
+                    foreach ($blueprints as $bp) { if ($bp['status'] === 'ready') $readyCount++; }
+                    $allowed = blueprints_allowed();
+                    $remaining = max(0, $allowed - $readyCount);
+                ?>
                 <p class="text-gray-500 mt-1">Namaste, <span class="font-semibold text-navy-600"><?= e(auth()['name']) ?></span>!
-                    <span class="text-xs text-gray-400">— <?= blueprints_allowed() ?> blueprint<?= blueprints_allowed() > 1 ? 's' : '' ?> allowed</span>
+                    <span class="text-xs text-gray-400">— <?= $remaining ?> of <?= $allowed ?> blueprint<?= $allowed > 1 ? 's' : '' ?> remaining</span>
                 </p>
             </div>
+            <?php if ($remaining > 0): ?>
             <a href="/blueprint/step1"
                 class="inline-flex items-center gap-2 px-6 py-3 bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition shadow-lg shadow-saffron-500/20">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                Naya Blueprint
+                Naya Blueprint (<?= $remaining ?> left)
             </a>
+            <?php else: ?>
+            <a href="/#pricing"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-navy-600 text-white rounded-xl font-bold hover:bg-navy-700 transition shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                Upgrade Plan
+            </a>
+            <?php endif; ?>
         </div>
 
         <?php if (empty($blueprints)): ?>

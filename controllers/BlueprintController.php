@@ -114,7 +114,62 @@ class BlueprintController extends Controller {
         $draft['study_hours'] = $studyHours;
         $draft['exam_date'] = $examDate;
         $_SESSION['blueprint_draft'] = $draft;
-        redirect('/blueprint/review');
+
+        // Check if user has remaining blueprint credits from their plan
+        $blueprintModel = new Blueprint();
+        $readyCount = $blueprintModel->countByStatus(Auth::id(), 'ready');
+        $allowed = blueprints_allowed();
+
+        if ($readyCount < $allowed) {
+            // User has credits remaining — skip payment, generate directly
+            redirect('/blueprint/generate');
+        } else {
+            // No credits — need to upgrade/pay
+            redirect('/blueprint/review');
+        }
+    }
+
+    /**
+     * GET /blueprint/generate
+     * Direct generation for users who already paid (have blueprint credits).
+     * Skips payment entirely — creates blueprint and generates immediately.
+     */
+    public function generate(): void {
+        $this->requireAuth();
+
+        $draft = $_SESSION['blueprint_draft'] ?? null;
+        if (!$draft || !isset($draft['exam_date'])) {
+            redirect('/blueprint/step1');
+            return;
+        }
+
+        // Verify user still has credits
+        $blueprintModel = new Blueprint();
+        $readyCount = $blueprintModel->countByStatus(Auth::id(), 'ready');
+        $allowed = blueprints_allowed();
+
+        if ($readyCount >= $allowed) {
+            flash('error', 'Aapki plan limit reach ho gayi hai. Upgrade karein.');
+            redirect('/dashboard');
+            return;
+        }
+
+        // Create blueprint directly (no payment needed — already paid via plan)
+        $blueprintId = $blueprintModel->create([
+            'user_id'       => Auth::id(),
+            'exam_id'       => $draft['exam_id'],
+            'education'     => $draft['education'],
+            'weak_subjects' => json_encode($draft['weak_subjects']),
+            'study_hours'   => $draft['study_hours'],
+            'exam_date'     => $draft['exam_date'],
+            'status'        => 'generating',
+        ]);
+
+        $blueprint = $blueprintModel->getWithExam($blueprintId);
+
+        // Import PaymentController for generation logic
+        $paymentController = new \App\Controllers\PaymentController();
+        $paymentController->generateAndFinalize($blueprintId, $blueprint, $blueprintModel);
     }
 
     public function review(): void {
@@ -123,9 +178,18 @@ class BlueprintController extends Controller {
         if (!$draft || !isset($draft['exam_date'])) {
             redirect('/blueprint/step3');
         }
+
+        // Show how many credits remaining
+        $blueprintModel = new Blueprint();
+        $readyCount = $blueprintModel->countByStatus(Auth::id(), 'ready');
+        $allowed = blueprints_allowed();
+
         $this->view('blueprint/review', [
-            'pageTitle' => 'Review & Pay',
+            'pageTitle' => 'Review & Upgrade',
             'draft' => $draft,
+            'readyCount' => $readyCount,
+            'allowed' => $allowed,
+            'needsUpgrade' => true,
         ]);
     }
 

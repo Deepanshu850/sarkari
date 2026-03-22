@@ -119,6 +119,7 @@ $router->post('/blueprint/step2', [\App\Controllers\BlueprintController::class, 
 $router->get('/blueprint/step3', [\App\Controllers\BlueprintController::class, 'step3']);
 $router->post('/blueprint/step3', [\App\Controllers\BlueprintController::class, 'saveStep3']);
 $router->get('/blueprint/review', [\App\Controllers\BlueprintController::class, 'review']);
+$router->get('/blueprint/generate', [\App\Controllers\BlueprintController::class, 'generate']);
 $router->post('/payment/initiate', [\App\Controllers\PaymentController::class, 'initiate']);
 
 // API

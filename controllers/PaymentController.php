@@ -443,10 +443,33 @@ class PaymentController extends Controller {
      * Generate blueprint data - try AI first, fall back to sample data.
      */
     private function generateBlueprintData(array $blueprint): array {
+        $planDays = BLUEPRINT_DAYS; // 30
+
         if (AI_API_KEY && !str_contains(AI_API_KEY, 'xxxxxxxxxxxxx')) {
             try {
                 $aiService = new AIService();
-                return $aiService->generateBlueprint($blueprint, $blueprint);
+                $result = $aiService->generateBlueprint($blueprint, $blueprint);
+
+                // Validate AI returned enough days — if not, pad with sample data
+                if (isset($result['days']) && count($result['days']) >= $planDays) {
+                    return $result;
+                }
+
+                // AI returned fewer days — pad remaining with sample data
+                if (isset($result['days']) && count($result['days']) >= 15) {
+                    $existing = count($result['days']);
+                    $sample = $this->generateSampleBlueprint($blueprint);
+                    for ($d = $existing + 1; $d <= $planDays; $d++) {
+                        $sampleDay = $sample['days'][$d - 1] ?? $sample['days'][0];
+                        $sampleDay['day'] = $d;
+                        $result['days'][] = $sampleDay;
+                    }
+                    error_log("AI returned only {$existing} days for blueprint, padded to {$planDays}");
+                    return $result;
+                }
+
+                // Too few days — fall through to sample
+                error_log("AI returned only " . count($result['days'] ?? []) . " days, using sample");
             } catch (\Exception $e) {
                 error_log("AI generation failed, using sample data: " . $e->getMessage());
             }

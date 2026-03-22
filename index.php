@@ -123,6 +123,8 @@ $router->post('/payment/initiate', [\App\Controllers\PaymentController::class, '
 
 // API
 $router->get('/api/exam-subjects/{id}', [\App\Controllers\BlueprintController::class, 'getSubjects']);
+$router->post('/api/progress/toggle', [\App\Controllers\BlueprintController::class, 'toggleProgress']);
+$router->post('/api/result/submit', [\App\Controllers\BlueprintController::class, 'submitResult']);
 
 // PDF
 $router->get('/blueprint/download/{id}', [\App\Controllers\PdfController::class, 'download']);

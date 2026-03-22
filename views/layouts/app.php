@@ -45,13 +45,15 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
     <meta name="twitter:image" content="<?= e($_seo_image) ?>">
 
     <!-- PWA / Mobile -->
-    <meta name="theme-color" content="#0C1B3A">
+    <meta name="theme-color" content="#FF6B00">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="<?= e(APP_NAME) ?>">
-    <meta name="application-name" content="<?= e(APP_NAME) ?>">
+    <meta name="apple-mobile-web-app-title" content="Sarkari">
+    <meta name="application-name" content="Sarkari Blueprint">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
+    <link rel="manifest" href="/public/manifest.json">
+    <link rel="apple-touch-icon" href="/public/images/icon-192.png">
 
     <!-- Geo Targeting (India) -->
     <meta name="geo.region" content="IN">
@@ -168,6 +170,22 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
 
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center gap-1">
+                    <!-- Language Toggle -->
+                    <div class="relative mr-1">
+                        <button id="langToggleBtn"
+                            onclick="toggleLanguage()"
+                            title="Language toggle"
+                            class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-300 hover:text-white hover:bg-white/10 transition border border-white/10"
+                            data-lang="en">
+                            <span class="lang-hi">हिंदी</span>
+                            <span class="text-white/30 mx-0.5">|</span>
+                            <span class="lang-en font-black text-saffron-400">EN</span>
+                        </button>
+                        <div id="langTooltip"
+                            class="absolute top-full right-0 mt-2 bg-navy-500 border border-gold-500/30 text-gold-300 text-xs font-semibold px-3 py-2 rounded-lg whitespace-nowrap shadow-xl opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+                            Full Hindi coming soon! 🇮🇳
+                        </div>
+                    </div>
                     <?php if (current_path() === '/' && !auth()): ?>
                         <!-- Landing page: minimal nav, no escape routes -->
                         <a href="#get-blueprint" class="px-5 py-2 bg-saffron-500 text-white rounded-lg text-sm font-bold hover:bg-saffron-600 transition shadow-lg shadow-saffron-500/20">
@@ -238,6 +256,17 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
                 <?php else: ?>
                     <a href="/login" class="block px-4 py-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 font-medium">Login</a>
                 <?php endif; ?>
+                <!-- Mobile Language Toggle -->
+                <div class="relative pt-1 border-t border-white/10 mt-1">
+                    <button onclick="toggleLanguage(); document.getElementById('mobileMenu').classList.add('hidden');"
+                        class="flex items-center gap-2 px-4 py-2.5 w-full rounded-lg text-gray-300 hover:text-white hover:bg-white/10 font-medium text-sm">
+                        <span>🌐</span>
+                        <span class="lang-hi">हिंदी</span>
+                        <span class="text-white/30">|</span>
+                        <span class="lang-en font-bold text-saffron-400">EN</span>
+                        <span class="text-xs text-gray-500 ml-1">Toggle Language</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -331,5 +360,83 @@ $_seo_keywords = $pageKeywords ?? 'sarkari naukri, government exam preparation, 
     </footer>
 
     <script src="<?= asset('js/app.js') ?>"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/public/sw.js', { scope: '/' })
+                .catch(function (err) {
+                    console.warn('SW registration failed:', err);
+                });
+        });
+    }
+    </script>
+
+    <!-- Hindi/English Language Toggle Logic -->
+    <script>
+    (function () {
+        function getCookie(name) {
+            var match = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+        function setCookie(name, value, days) {
+            var expires = '';
+            if (days) {
+                var d = new Date();
+                d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+                expires = '; expires=' + d.toUTCString();
+            }
+            document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/; SameSite=Lax';
+        }
+
+        window.toggleLanguage = function () {
+            var current = getCookie('lang') || 'en';
+            var next = current === 'en' ? 'hi' : 'en';
+            setCookie('lang', next, 365);
+
+            var btn = document.getElementById('langToggleBtn');
+            if (btn) {
+                btn.setAttribute('data-lang', next);
+                updateLangBtn(btn, next);
+            }
+
+            if (next === 'hi') {
+                // Show tooltip "Full Hindi coming soon!"
+                var tooltip = document.getElementById('langTooltip');
+                if (tooltip) {
+                    tooltip.classList.remove('opacity-0', 'pointer-events-none');
+                    tooltip.classList.add('opacity-100');
+                    setTimeout(function () {
+                        tooltip.classList.remove('opacity-100');
+                        tooltip.classList.add('opacity-0');
+                    }, 2500);
+                }
+            }
+        };
+
+        function updateLangBtn(btn, lang) {
+            var hiSpan = btn.querySelector('.lang-hi');
+            var enSpan = btn.querySelector('.lang-en');
+            if (lang === 'hi') {
+                if (hiSpan) hiSpan.classList.add('font-black', 'text-saffron-400');
+                if (enSpan) enSpan.classList.remove('font-black', 'text-saffron-400');
+            } else {
+                if (enSpan) enSpan.classList.add('font-black', 'text-saffron-400');
+                if (hiSpan) hiSpan.classList.remove('font-black', 'text-saffron-400');
+            }
+        }
+
+        // Init on page load
+        window.addEventListener('DOMContentLoaded', function () {
+            var btn = document.getElementById('langToggleBtn');
+            if (btn) {
+                var lang = getCookie('lang') || 'en';
+                btn.setAttribute('data-lang', lang);
+                updateLangBtn(btn, lang);
+            }
+        });
+    })();
+    </script>
 </body>
 </html>

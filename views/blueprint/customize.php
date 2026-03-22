@@ -1,5 +1,43 @@
 <section class="py-8 md:py-12">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Progress Indicator -->
+        <div class="mb-8">
+            <div class="flex items-center justify-center gap-0">
+                <!-- Step 1: Done -->
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-india-500 flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <span class="text-sm font-semibold text-india-600 hidden sm:inline">Payment Done</span>
+                </div>
+                <!-- Connector -->
+                <div class="w-8 sm:w-12 h-1 bg-india-300 mx-1 flex-shrink-0"></div>
+                <!-- Step 2: Active -->
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-saffron-500 flex items-center justify-center flex-shrink-0 shadow-sm ring-4 ring-saffron-200">
+                        <span class="text-white font-black text-sm">2</span>
+                    </div>
+                    <span class="text-sm font-bold text-saffron-600 hidden sm:inline">Customize <span class="text-gray-400 font-normal">(30 sec)</span></span>
+                </div>
+                <!-- Connector -->
+                <div class="w-8 sm:w-12 h-1 bg-gray-200 mx-1 flex-shrink-0"></div>
+                <!-- Step 3: Upcoming -->
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                        <span class="text-gray-400 font-black text-sm">3</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-400 hidden sm:inline">Blueprint Ready!</span>
+                </div>
+            </div>
+            <!-- Mobile labels -->
+            <div class="flex justify-between sm:hidden mt-2 px-1 text-[11px] font-medium">
+                <span class="text-india-600">Payment Done</span>
+                <span class="text-saffron-600 font-bold">Customize</span>
+                <span class="text-gray-400">Blueprint Ready</span>
+            </div>
+        </div>
+
         <!-- Success Banner -->
         <div class="bg-india-50 border border-india-200 rounded-xl p-4 mb-8 flex items-center gap-3">
             <div class="w-10 h-10 bg-india-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -12,14 +50,24 @@
         </div>
 
         <div class="text-center mb-8">
-            <h1 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Apna Blueprint Customize Karein</h1>
+            <h1 class="font-display text-2xl md:text-3xl font-bold text-navy-600">
+                <?= !empty($isEdit) ? 'Edit &amp; Regenerate Blueprint' : 'Apna Blueprint Customize Karein' ?>
+            </h1>
             <p class="text-gray-500 mt-2">
                 <span class="font-semibold text-saffron-600"><?= e($blueprint['exam_name']) ?></span> ke liye
             </p>
+            <?php if (!empty($isEdit)): ?>
+            <p class="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 inline-block mt-2">
+                Aapki preferences update ho jayengi aur blueprint dobara generate hoga.
+            </p>
+            <?php endif; ?>
         </div>
 
         <form method="POST" action="/customize/<?= $blueprint['id'] ?>">
             <?= csrf_field() ?>
+            <?php if (!empty($isEdit)): ?>
+            <input type="hidden" name="is_edit" value="1">
+            <?php endif; ?>
 
             <!-- Education -->
             <div class="paper rounded-xl p-6 mb-5">
@@ -78,7 +126,7 @@
             <button type="submit"
                 class="w-full py-4 bg-saffron-500 text-white rounded-xl font-bold text-lg hover:bg-saffron-600 transition shadow-xl shadow-saffron-500/20 flex items-center justify-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                Generate Mera Blueprint
+                <?= !empty($isEdit) ? 'Save Changes &amp; Regenerate' : 'Generate Mera Blueprint' ?>
             </button>
             <p class="text-center text-xs text-gray-400 mt-3">Blueprint 30 seconds mein ready ho jayega</p>
         </form>

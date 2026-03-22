@@ -236,14 +236,9 @@ class BlueprintController extends Controller {
 
     public function review(): void {
         $this->requireAuth();
-        $draft = $_SESSION['blueprint_draft'] ?? null;
-        if (!$draft || !isset($draft['exam_date'])) {
-            redirect('/blueprint/step3');
-        }
-        $this->view('blueprint/review', [
-            'pageTitle' => 'Upgrade Plan',
-            'draft' => $draft,
-        ]);
+        // This page is no longer needed — always redirect to /upgrade
+        flash('error', 'Aapke plan ki blueprint limit ho gayi hai. Upgrade karein.');
+        redirect('/upgrade');
     }
 
     /**

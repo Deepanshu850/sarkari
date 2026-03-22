@@ -74,3 +74,47 @@ function abort(int $code, string $message = ''): void {
     echo $message ?: "Error $code";
     exit;
 }
+
+/**
+ * Get current user's plan key (starter/pro/ultimate)
+ */
+function user_plan(): string {
+    return auth()['plan'] ?? 'starter';
+}
+
+/**
+ * Get current user's plan config array
+ */
+function user_plan_config(): array {
+    return PLANS[user_plan()] ?? PLANS['starter'];
+}
+
+/**
+ * Check if current user has a specific plan feature
+ */
+function has_feature(string $feature): bool {
+    $config = user_plan_config();
+    return in_array($feature, $config['features'] ?? []);
+}
+
+/**
+ * Get number of blueprints allowed for current user
+ */
+function blueprints_allowed(): int {
+    return auth()['plan_blueprints_allowed'] ?? PLANS[user_plan()]['blueprints'] ?? 1;
+}
+
+/**
+ * Get plan badge HTML
+ */
+function plan_badge(): string {
+    $plan = user_plan();
+    $label = PLANS[$plan]['label'] ?? 'Starter';
+    $colors = [
+        'starter'  => 'bg-gold-50 text-gold-700 border-gold-200',
+        'pro'      => 'bg-saffron-50 text-saffron-700 border-saffron-200',
+        'ultimate' => 'bg-navy-50 text-navy-700 border-navy-200',
+    ];
+    $color = $colors[$plan] ?? $colors['starter'];
+    return '<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ' . $color . '">' . e($label) . '</span>';
+}

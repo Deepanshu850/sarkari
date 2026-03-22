@@ -2,8 +2,13 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <div>
-                <h1 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Mere Blueprints</h1>
-                <p class="text-gray-500 mt-1">Namaste, <span class="font-semibold text-navy-600"><?= e(auth()['name']) ?></span>!</p>
+                <div class="flex items-center gap-2 mb-1">
+                    <h1 class="font-display text-2xl md:text-3xl font-bold text-navy-600">Mere Blueprints</h1>
+                    <?= plan_badge() ?>
+                </div>
+                <p class="text-gray-500 mt-1">Namaste, <span class="font-semibold text-navy-600"><?= e(auth()['name']) ?></span>!
+                    <span class="text-xs text-gray-400">— <?= blueprints_allowed() ?> blueprint<?= blueprints_allowed() > 1 ? 's' : '' ?> allowed</span>
+                </p>
             </div>
             <a href="/blueprint/step1"
                 class="inline-flex items-center gap-2 px-6 py-3 bg-saffron-500 text-white rounded-xl font-bold hover:bg-saffron-600 transition shadow-lg shadow-saffron-500/20">

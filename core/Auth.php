@@ -6,10 +6,12 @@ class Auth {
     public static function login(array $user): void {
         session_regenerate_id(true);
         $_SESSION['user'] = [
-            'id'    => $user['id'],
-            'name'  => $user['name'],
-            'email' => $user['email'],
-            'role'  => $user['role'],
+            'id'                     => $user['id'],
+            'name'                   => $user['name'],
+            'email'                  => $user['email'],
+            'role'                   => $user['role'],
+            'plan'                   => $user['plan'] ?? 'starter',
+            'plan_blueprints_allowed' => $user['plan_blueprints_allowed'] ?? 1,
         ];
     }
 

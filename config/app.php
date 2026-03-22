@@ -27,9 +27,18 @@ define('AI_PROVIDER', $_ENV['AI_PROVIDER'] ?? 'claude');
 define('AI_API_KEY', $_ENV['AI_API_KEY'] ?? '');
 define('AI_MODEL', $_ENV['AI_MODEL'] ?? 'claude-sonnet-4-20250514');
 
-define('BLUEPRINT_PRICE', 499);    // ₹499 (buzzino takes amount in main units)
-define('BLUEPRINT_PRICE_PAISE', 49900); // paise for DB storage
 define('BLUEPRINT_DAYS', 30);
+
+// Plan pricing and limits
+define('PLANS', [
+    'starter'  => ['price' => 499,  'paise' => 49900,  'blueprints' => 1, 'label' => 'Starter',  'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee']],
+    'pro'      => ['price' => 799,  'paise' => 79900,  'blueprints' => 2, 'label' => 'Pro',      'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee', 'edit_regenerate', 'priority', 'referral']],
+    'ultimate' => ['price' => 999,  'paise' => 99900,  'blueprints' => 3, 'label' => 'Ultimate', 'features' => ['blueprint', 'pdf', 'progress', 'countdown', 'guarantee', 'edit_regenerate', 'priority', 'referral', 'unlimited_regen', 'lifetime']],
+]);
+
+// Default/fallback for old code
+define('BLUEPRINT_PRICE', 499);
+define('BLUEPRINT_PRICE_PAISE', 49900);
 
 define('STORAGE_PATH', __DIR__ . '/../storage');
 

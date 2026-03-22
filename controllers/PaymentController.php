@@ -33,6 +33,13 @@ class PaymentController extends Controller {
         $email   = trim(strtolower($_POST['email'] ?? ''));
         $phone   = trim($_POST['phone'] ?? '');
         $examId  = (int) ($_POST['exam_id'] ?? 0);
+        $planKey = $_POST['plan'] ?? 'starter';
+
+        // Validate plan
+        if (!isset(PLANS[$planKey])) {
+            $planKey = 'starter';
+        }
+        $plan = PLANS[$planKey];
 
         // Minimal validation
         if (strlen($name) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -83,21 +90,24 @@ class PaymentController extends Controller {
             'user_id'           => $user['id'],
             'blueprint_id'      => $blueprintId,
             'razorpay_order_id' => $orderId,
-            'amount'            => BLUEPRINT_PRICE_PAISE,
+            'amount'            => $plan['paise'],
             'status'            => 'created',
+            'plan'              => $planKey,
         ]);
 
+        // Store plan info in session for callback
         $_SESSION['pending_blueprint_id'] = $blueprintId;
         $_SESSION['pending_order_id'] = $orderId;
         $_SESSION['pending_exam_name'] = $exam['name'];
+        $_SESSION['pending_plan'] = $planKey;
 
-        // Redirect to Buzzino
+        // Redirect to Buzzino with plan-specific pricing
         $callbackUrl = base_url() . '/payment/callback';
         $buzzUrl = BUZZINO_PAY_URL
-            . '?amount=' . BLUEPRINT_PRICE
+            . '?amount=' . $plan['price']
             . '&currency=INR'
-            . '&product=' . urlencode(BUZZINO_PRODUCT_NAME)
-            . '&desc=' . urlencode($exam['name'] . ' - 30 Day Blueprint')
+            . '&product=' . urlencode(BUZZINO_PRODUCT_NAME . ' - ' . $plan['label'])
+            . '&desc=' . urlencode($exam['name'] . ' - ' . $plan['label'] . ' Plan')
             . '&return=' . urlencode($callbackUrl);
 
         redirect_external($buzzUrl);
@@ -203,6 +213,27 @@ class PaymentController extends Controller {
                 'razorpay_payment_id' => 'buzzino_' . time(),
                 'status'              => 'captured',
             ]);
+        }
+
+        // Upgrade user's plan
+        $planKey = $_SESSION['pending_plan'] ?? ($payment['plan'] ?? 'starter');
+        if (isset(PLANS[$planKey])) {
+            $planConfig = PLANS[$planKey];
+            $userModel = new User();
+            $currentUser = $userModel->find(Auth::id());
+            // Only upgrade, never downgrade
+            $planRank = ['starter' => 1, 'pro' => 2, 'ultimate' => 3];
+            $currentRank = $planRank[$currentUser['plan'] ?? 'starter'] ?? 1;
+            $newRank = $planRank[$planKey] ?? 1;
+            if ($newRank >= $currentRank) {
+                $userModel->update(Auth::id(), [
+                    'plan' => $planKey,
+                    'plan_blueprints_allowed' => $planConfig['blueprints'],
+                    'plan_purchased_at' => date('Y-m-d H:i:s'),
+                ]);
+                // Refresh session
+                Auth::login($userModel->find(Auth::id()));
+            }
         }
 
         $weakSubjects = json_decode($blueprint['weak_subjects'], true);

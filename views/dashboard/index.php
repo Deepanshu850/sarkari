@@ -23,7 +23,7 @@
                 Naya Blueprint (<?= $remaining ?> left)
             </a>
             <?php else: ?>
-            <a href="/#pricing"
+            <a href="/upgrade"
                 class="inline-flex items-center gap-2 px-6 py-3 bg-navy-600 text-white rounded-xl font-bold hover:bg-navy-700 transition shadow-lg">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
                 Upgrade Plan

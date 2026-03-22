@@ -75,6 +75,7 @@ require_once __DIR__ . '/controllers/PaymentController.php';
 require_once __DIR__ . '/controllers/DashboardController.php';
 require_once __DIR__ . '/controllers/PdfController.php';
 require_once __DIR__ . '/controllers/AdminController.php';
+require_once __DIR__ . '/controllers/UpgradeController.php';
 
 // Session
 ini_set('session.gc_maxlifetime', 7200); // 2 hours
@@ -131,6 +132,11 @@ $router->get('/api/blueprint/status/{id}', [\App\Controllers\BlueprintController
 
 // PDF
 $router->get('/blueprint/download/{id}', [\App\Controllers\PdfController::class, 'download']);
+
+// Upgrade
+$router->get('/upgrade', [\App\Controllers\UpgradeController::class, 'index']);
+$router->post('/upgrade/checkout', [\App\Controllers\UpgradeController::class, 'checkout']);
+$router->get('/upgrade/callback', [\App\Controllers\UpgradeController::class, 'callback']);
 
 // Dashboard
 $router->get('/dashboard', [\App\Controllers\DashboardController::class, 'index']);

@@ -11,6 +11,16 @@ class BlueprintController extends Controller {
 
     public function step1(): void {
         $this->requireAuth();
+
+        // Block wizard if no credits remaining
+        $blueprintModel = new Blueprint();
+        $readyCount = $blueprintModel->countByStatus(\App\Core\Auth::id(), 'ready');
+        if ($readyCount >= blueprints_allowed()) {
+            flash('error', 'Aapke plan mein blueprint limit ho gayi hai. Upgrade karein.');
+            redirect('/upgrade');
+            return;
+        }
+
         $examModel = new Exam();
         $grouped = $examModel->getActiveGrouped();
         $this->view('blueprint/step1', [
@@ -123,7 +133,8 @@ class BlueprintController extends Controller {
         if ($readyCount < $allowed) {
             redirect('/blueprint/generate');
         } else {
-            redirect('/blueprint/review');
+            flash('error', 'Aapke plan mein blueprint limit ho gayi hai. Upgrade karein.');
+            redirect('/upgrade');
         }
     }
 

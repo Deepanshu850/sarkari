@@ -180,4 +180,22 @@ class Blueprint extends Model {
         $this->db->prepare("UPDATE users SET referral_code = ? WHERE id = ?")->execute([$code, $userId]);
         return $code;
     }
+
+    /**
+     * Count blueprints by status for a user
+     */
+    public function countByStatus(int $userId, string $status): int {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM blueprints WHERE user_id = ? AND status = ?");
+        $stmt->execute([$userId, $status]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Clean up orphaned pending_payment blueprints older than 24 hours
+     */
+    public function cleanupOrphaned(int $userId): void {
+        $this->db->prepare(
+            "DELETE FROM blueprints WHERE user_id = ? AND status = 'pending_payment' AND created_at < DATE_SUB(NOW(), INTERVAL 24 HOUR)"
+        )->execute([$userId]);
+    }
 }

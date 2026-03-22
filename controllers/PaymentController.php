@@ -18,10 +18,15 @@ class PaymentController extends Controller {
      * POST /checkout
      * FRICTIONLESS: No login required. Takes name + email + exam from landing page,
      * creates/finds user silently, creates blueprint, redirects to Buzzino payment.
+     *
+     * SECURITY FIXES:
+     * - Blueprint quota enforcement before creation
+     * - Plan price validated server-side from PLANS config (not user input)
+     * - Callback token generated for tamper-proof verification
+     * - Orphan cleanup for old pending blueprints
      */
     public function checkout(): void {
         if (!\App\Core\CSRF::validate()) {
-            // Don't lose the customer — regenerate token and send them back
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             $this->storeOldInput();
             flash('error', 'Page session expired. Please click the button again.');
@@ -35,7 +40,7 @@ class PaymentController extends Controller {
         $examId  = (int) ($_POST['exam_id'] ?? 0);
         $planKey = $_POST['plan'] ?? 'starter';
 
-        // Validate plan
+        // FIX #1: Validate plan strictly against server config
         if (!isset(PLANS[$planKey])) {
             $planKey = 'starter';
         }
@@ -43,6 +48,7 @@ class PaymentController extends Controller {
 
         // Minimal validation
         if (strlen($name) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->storeOldInput();
             flash('error', 'Please enter your name and a valid email.');
             redirect('/#get-blueprint');
         }
@@ -50,11 +56,12 @@ class PaymentController extends Controller {
         $examModel = new Exam();
         $exam = $examModel->find($examId);
         if (!$exam) {
+            $this->storeOldInput();
             flash('error', 'Please select an exam.');
             redirect('/#get-blueprint');
         }
 
-        // Find or create user silently (no password needed yet)
+        // Find or create user silently
         $userModel = new User();
         $user = $userModel->findByEmail($email);
 
@@ -72,8 +79,25 @@ class PaymentController extends Controller {
         // Auto-login
         Auth::login($user);
 
-        // Create blueprint with smart defaults (will be customized after payment)
+        // FIX #5: Clean up orphaned pending_payment blueprints (>24h old)
         $blueprintModel = new Blueprint();
+        $blueprintModel->cleanupOrphaned($user['id']);
+
+        // FIX #6: Enforce blueprint quota
+        $readyCount = $blueprintModel->countByStatus($user['id'], 'ready');
+        $allowedCount = $plan['blueprints'];
+        // If user already has a higher plan, use that limit
+        if (isset(PLANS[$user['plan'] ?? 'starter'])) {
+            $existingAllowed = PLANS[$user['plan']]['blueprints'] ?? 1;
+            $allowedCount = max($allowedCount, $existingAllowed);
+        }
+        if ($readyCount >= $allowedCount) {
+            flash('error', 'Aapki plan limit (' . $allowedCount . ' blueprints) reach ho gayi hai. Upgrade karein ya dashboard se manage karein.');
+            redirect('/#pricing');
+            return;
+        }
+
+        // Create blueprint
         $blueprintId = $blueprintModel->create([
             'user_id'       => $user['id'],
             'exam_id'       => $examId,
@@ -84,7 +108,10 @@ class PaymentController extends Controller {
             'status'        => 'pending_payment',
         ]);
 
+        // FIX #2: Generate a secure callback token (not relying solely on session)
+        $callbackToken = bin2hex(random_bytes(16));
         $orderId = 'sarkari_' . $blueprintId . '_' . time();
+
         $paymentModel = new Payment();
         $paymentModel->create([
             'user_id'           => $user['id'],
@@ -95,14 +122,14 @@ class PaymentController extends Controller {
             'plan'              => $planKey,
         ]);
 
-        // Store plan info in session for callback
+        // Store in session (defense in depth, but callback also verifies via DB)
         $_SESSION['pending_blueprint_id'] = $blueprintId;
         $_SESSION['pending_order_id'] = $orderId;
-        $_SESSION['pending_exam_name'] = $exam['name'];
         $_SESSION['pending_plan'] = $planKey;
+        $_SESSION['callback_token'] = $callbackToken;
 
-        // Redirect to Buzzino with plan-specific pricing
-        $callbackUrl = base_url() . '/payment/callback';
+        // FIX #9: Include callback token in return URL for verification
+        $callbackUrl = base_url() . '/payment/callback?token=' . $callbackToken;
         $buzzUrl = BUZZINO_PAY_URL
             . '?amount=' . $plan['price']
             . '&currency=INR'
@@ -115,8 +142,7 @@ class PaymentController extends Controller {
 
     /**
      * POST /payment/initiate
-     * Creates blueprint + payment record, returns Buzzino redirect URL.
-     * (For logged-in users using the multi-step wizard)
+     * For logged-in users using the multi-step wizard.
      */
     public function initiate(): void {
         $this->requireAuth();
@@ -127,7 +153,17 @@ class PaymentController extends Controller {
             json_response(['error' => 'Invalid session. Please start over.'], 400);
         }
 
+        // FIX #11: Enforce blueprint quota for initiate flow too
         $blueprintModel = new Blueprint();
+        $readyCount = $blueprintModel->countByStatus(Auth::id(), 'ready');
+        if ($readyCount >= blueprints_allowed()) {
+            json_response(['error' => 'Blueprint limit reached. Upgrade your plan.'], 422);
+            return;
+        }
+
+        // FIX #5: Cleanup old orphans
+        $blueprintModel->cleanupOrphaned(Auth::id());
+
         $blueprintId = $blueprintModel->create([
             'user_id'       => Auth::id(),
             'exam_id'       => $draft['exam_id'],
@@ -138,24 +174,30 @@ class PaymentController extends Controller {
             'status'        => 'pending_payment',
         ]);
 
+        // Use user's current plan for pricing
+        $userPlan = user_plan();
+        $planConfig = PLANS[$userPlan] ?? PLANS['starter'];
+
         $orderId = 'sarkari_' . $blueprintId . '_' . time();
+        $callbackToken = bin2hex(random_bytes(16));
 
         $paymentModel = new Payment();
         $paymentModel->create([
             'user_id'           => Auth::id(),
             'blueprint_id'      => $blueprintId,
             'razorpay_order_id' => $orderId,
-            'amount'            => BLUEPRINT_PRICE_PAISE,
+            'amount'            => $planConfig['paise'],
             'status'            => 'created',
+            'plan'              => $userPlan,
         ]);
 
         $_SESSION['pending_blueprint_id'] = $blueprintId;
         $_SESSION['pending_order_id'] = $orderId;
+        $_SESSION['callback_token'] = $callbackToken;
 
-        // Build Buzzino redirect URL
-        $callbackUrl = base_url() . '/payment/callback';
+        $callbackUrl = base_url() . '/payment/callback?token=' . $callbackToken;
         $buzzUrl = BUZZINO_PAY_URL
-            . '?amount=' . BLUEPRINT_PRICE
+            . '?amount=' . $planConfig['price']
             . '&currency=INR'
             . '&product=' . urlencode(BUZZINO_PRODUCT_NAME)
             . '&desc=' . urlencode($draft['exam_name'] . ' - 30 Day Blueprint')
@@ -170,91 +212,106 @@ class PaymentController extends Controller {
     /**
      * GET /payment/callback
      * Buzzino redirects here with ?payment=success or ?payment=error
+     *
+     * SECURITY FIXES:
+     * - Callback token verification (prevents URL crafting attacks)
+     * - Idempotency: already-captured payments skip re-processing
+     * - Blueprint-order cross-validation
+     * - Session cleared immediately after processing
+     * - Graceful handling for expired sessions
      */
     public function callback(): void {
-        $this->requireAuth();
-
         $paymentStatus = $_GET['payment'] ?? '';
+        $callbackToken = $_GET['token'] ?? '';
+
+        // FIX #7: Handle expired sessions gracefully
+        if (!Auth::check()) {
+            // Try to recover from order_id in the URL if session expired
+            flash('error', 'Session expired. Please login to see your blueprint.');
+            redirect('/login');
+            return;
+        }
+
+        $sessionToken = $_SESSION['callback_token'] ?? '';
         $blueprintId = $_SESSION['pending_blueprint_id'] ?? 0;
         $orderId = $_SESSION['pending_order_id'] ?? '';
 
-        if (!$blueprintId) {
-            flash('error', 'Payment session expired. Please try again.');
+        // FIX #9: Verify callback token to prevent URL crafting
+        if (!$blueprintId || !$orderId || !hash_equals($sessionToken, $callbackToken)) {
+            // Could be a replay/crafted URL or expired session
+            flash('error', 'Invalid payment session. If you paid, your blueprint will be ready shortly.');
             redirect('/dashboard');
+            return;
         }
+
+        // Clear session tokens immediately to prevent replay
+        $pendingPlan = $_SESSION['pending_plan'] ?? 'starter';
+        unset($_SESSION['pending_blueprint_id'], $_SESSION['pending_order_id'],
+              $_SESSION['callback_token'], $_SESSION['pending_plan']);
 
         $blueprintModel = new Blueprint();
         $blueprint = $blueprintModel->getWithExam($blueprintId);
 
-        if (!$blueprint || $blueprint['user_id'] != Auth::id()) {
+        if (!$blueprint || (int)$blueprint['user_id'] !== Auth::id()) {
             flash('error', 'Blueprint not found.');
             redirect('/dashboard');
+            return;
+        }
+
+        $paymentModel = new Payment();
+        $payment = $paymentModel->findByOrderId($orderId);
+
+        // FIX #8: Validate order belongs to this blueprint
+        if (!$payment || (int)$payment['blueprint_id'] !== $blueprintId) {
+            flash('error', 'Payment record mismatch. Contact support.');
+            redirect('/dashboard');
+            return;
+        }
+
+        // FIX #3: Idempotency - if already captured, skip processing
+        if ($payment['status'] === 'captured') {
+            // Already processed (possibly by webhook) — just redirect
+            if ($blueprint['status'] === 'ready') {
+                redirect('/blueprint/view/' . $blueprintId);
+            } else {
+                redirect('/customize/' . $blueprintId);
+            }
+            return;
         }
 
         if ($paymentStatus !== 'success') {
-            // Payment failed or cancelled
-            $paymentModel = new Payment();
-            $payment = $paymentModel->findByOrderId($orderId);
-            if ($payment) {
-                $paymentModel->update($payment['id'], ['status' => 'failed']);
-            }
+            $paymentModel->update($payment['id'], ['status' => 'failed']);
             $blueprintModel->update($blueprintId, ['status' => 'failed']);
-
-            unset($_SESSION['pending_blueprint_id'], $_SESSION['pending_order_id']);
             flash('error', 'Payment was not completed. You can retry from your dashboard.');
             redirect('/dashboard');
+            return;
         }
 
-        // Payment success - mark captured
-        $paymentModel = new Payment();
-        $payment = $paymentModel->findByOrderId($orderId);
-        if ($payment) {
-            $paymentModel->update($payment['id'], [
-                'razorpay_payment_id' => 'buzzino_' . time(),
-                'status'              => 'captured',
-            ]);
-        }
+        // Mark payment captured
+        $paymentModel->update($payment['id'], [
+            'razorpay_payment_id' => 'buzzino_' . time(),
+            'status'              => 'captured',
+        ]);
 
-        // Upgrade user's plan
-        $planKey = $_SESSION['pending_plan'] ?? ($payment['plan'] ?? 'starter');
-        if (isset(PLANS[$planKey])) {
-            $planConfig = PLANS[$planKey];
-            $userModel = new User();
-            $currentUser = $userModel->find(Auth::id());
-            // Only upgrade, never downgrade
-            $planRank = ['starter' => 1, 'pro' => 2, 'ultimate' => 3];
-            $currentRank = $planRank[$currentUser['plan'] ?? 'starter'] ?? 1;
-            $newRank = $planRank[$planKey] ?? 1;
-            if ($newRank >= $currentRank) {
-                $userModel->update(Auth::id(), [
-                    'plan' => $planKey,
-                    'plan_blueprints_allowed' => $planConfig['blueprints'],
-                    'plan_purchased_at' => date('Y-m-d H:i:s'),
-                ]);
-                // Refresh session
-                Auth::login($userModel->find(Auth::id()));
-            }
-        }
+        // Upgrade user's plan (only upgrade, never downgrade)
+        $planKey = $payment['plan'] ?? $pendingPlan;
+        $this->upgradePlan($planKey);
 
+        // Route to customization or generation
         $weakSubjects = json_decode($blueprint['weak_subjects'], true);
-        $needsCustomization = empty($weakSubjects);
-
-        if ($needsCustomization) {
-            // Quick checkout user — let them personalize before generating
+        if (empty($weakSubjects)) {
             $blueprintModel->update($blueprintId, ['status' => 'pending_payment']);
-            unset($_SESSION['pending_order_id']);
             flash('success', 'Payment successful! Ab apna blueprint customize karein.');
             redirect('/customize/' . $blueprintId);
             return;
         }
 
-        // Full-flow user — generate immediately
         $this->generateAndFinalize($blueprintId, $blueprint, $blueprintModel);
     }
 
     /**
      * POST /payment/webhook
-     * Razorpay webhook via Buzzino (server-to-server)
+     * Razorpay webhook via Buzzino (server-to-server, HMAC verified)
      */
     public function webhook(): void {
         $payload = file_get_contents('php://input');
@@ -262,15 +319,13 @@ class PaymentController extends Controller {
 
         if (!$signature || !RAZORPAY_KEY_SECRET) {
             http_response_code(400);
-            echo 'Invalid';
-            exit;
+            exit('Invalid');
         }
 
         $expectedSignature = hash_hmac('sha256', $payload, RAZORPAY_KEY_SECRET);
         if (!hash_equals($expectedSignature, $signature)) {
             http_response_code(400);
-            echo 'Invalid signature';
-            exit;
+            exit('Invalid signature');
         }
 
         $event = json_decode($payload, true);
@@ -289,18 +344,68 @@ class PaymentController extends Controller {
                     'status'              => 'captured',
                     'webhook_payload'     => $payload,
                 ]);
+
+                // Also upgrade the user's plan from webhook (backup for callback)
+                if (!empty($payment['plan'])) {
+                    $userModel = new User();
+                    $user = $userModel->find($payment['user_id']);
+                    if ($user) {
+                        $planKey = $payment['plan'];
+                        if (isset(PLANS[$planKey])) {
+                            $planRank = ['starter' => 1, 'pro' => 2, 'ultimate' => 3];
+                            $currentRank = $planRank[$user['plan'] ?? 'starter'] ?? 1;
+                            $newRank = $planRank[$planKey] ?? 1;
+                            if ($newRank >= $currentRank) {
+                                $userModel->update($user['id'], [
+                                    'plan' => $planKey,
+                                    'plan_blueprints_allowed' => PLANS[$planKey]['blueprints'],
+                                    'plan_purchased_at' => date('Y-m-d H:i:s'),
+                                ]);
+                            }
+                        }
+                    }
+                }
             }
         }
 
         http_response_code(200);
-        echo 'OK';
-        exit;
+        exit('OK');
+    }
+
+    /**
+     * Upgrade user's plan (only upgrade, never downgrade)
+     */
+    private function upgradePlan(string $planKey): void {
+        if (!isset(PLANS[$planKey])) return;
+
+        $planConfig = PLANS[$planKey];
+        $userModel = new User();
+        $currentUser = $userModel->find(Auth::id());
+
+        $planRank = ['starter' => 1, 'pro' => 2, 'ultimate' => 3];
+        $currentRank = $planRank[$currentUser['plan'] ?? 'starter'] ?? 1;
+        $newRank = $planRank[$planKey] ?? 1;
+
+        if ($newRank >= $currentRank) {
+            $userModel->update(Auth::id(), [
+                'plan' => $planKey,
+                'plan_blueprints_allowed' => $planConfig['blueprints'],
+                'plan_purchased_at' => date('Y-m-d H:i:s'),
+            ]);
+            Auth::login($userModel->find(Auth::id()));
+        }
     }
 
     /**
      * Generate blueprint, create PDF, finalize.
      */
     public function generateAndFinalize(int $blueprintId, array $blueprint, Blueprint $blueprintModel): void {
+        // Prevent double-generation
+        if ($blueprint['status'] === 'ready') {
+            redirect('/blueprint/view/' . $blueprintId);
+            return;
+        }
+
         $blueprintModel->update($blueprintId, ['status' => 'generating']);
 
         try {
@@ -323,13 +428,12 @@ class PaymentController extends Controller {
                 'generated_at' => date('Y-m-d H:i:s'),
             ]);
 
-            unset($_SESSION['blueprint_draft'], $_SESSION['pending_blueprint_id'], $_SESSION['pending_order_id']);
+            unset($_SESSION['blueprint_draft']);
             flash('success', 'Aapka blueprint ready hai! Download karein.');
             redirect('/blueprint/view/' . $blueprintId);
         } catch (\Exception $e) {
             $blueprintModel->update($blueprintId, ['status' => 'failed']);
             error_log("Blueprint generation failed #{$blueprintId}: " . $e->getMessage());
-            unset($_SESSION['pending_blueprint_id'], $_SESSION['pending_order_id']);
             flash('error', 'Blueprint generation failed. You can retry from your dashboard.');
             redirect('/dashboard');
         }

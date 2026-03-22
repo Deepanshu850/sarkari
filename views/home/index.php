@@ -244,12 +244,11 @@ $schemaExtra = str_replace(
                 <div class="space-y-1.5 sm:space-y-2 mb-4 sm:mb-6">
                     <?php
                     $bullets = [
-                        '30-day AI study plan — har din ka topic, hours, resources',
+                        'AI aapke problems samajh ke UNIQUE plan banata hai',
+                        '30-day study plan — har din ka topic, hours, resources',
                         'Progress tracker — daily ✓ mark karo, streak banao',
                         'YouTube lectures + books + PYQ links — sab curated',
-                        'Mock test schedule — weekly practice + full simulation',
-                        'Phone pe app jaisa access — offline bhi padho',
-                        'Edit & regenerate — plan pasand nahi? Badlo free mein',
+                        'Premium PDF — print karo, wall pe lagao, follow karo',
                     ];
                     foreach ($bullets as $b):
                     ?>
@@ -583,15 +582,12 @@ $schemaExtra = str_replace(
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
             <?php
             $features = [
-                ['icon' => '🎯', 'title' => 'AI-Personalized 30-Day Plan', 'desc' => 'Aapke exam, weak subjects, study hours ke hisaab se UNIQUE plan. Do logon ka kabhi same nahi hoga.', 'worth' => '₹2,000'],
+                ['icon' => '🎯', 'title' => 'Hyper-Personalized 30-Day Plan', 'desc' => 'AI aapke problems, weak areas, study situation samajh ke UNIQUE plan banata hai. Do logon ka kabhi same nahi hoga.', 'worth' => '₹2,000'],
+                ['icon' => '🧠', 'title' => '7 Diagnostic Questions', 'desc' => 'Pehle aapko samjhega — attempt history, challenges, learning style — phir uske hisaab se plan.', 'worth' => '₹500'],
                 ['icon' => '📊', 'title' => 'Daily Progress Tracker', 'desc' => 'Har din ✓ mark karo, streak banao, progress ring dekhte jao. Motivation kabhi nahi giregi.', 'worth' => '₹500'],
                 ['icon' => '📚', 'title' => 'YouTube + Books + PYQ Links', 'desc' => 'Har topic ke liye best YouTube lectures, book chapters, aur previous year questions — sab curated.', 'worth' => '₹1,000'],
-                ['icon' => '📝', 'title' => 'Mock Test Schedule', 'desc' => 'Week 1: topic-wise → Week 2: section-wise → Week 3-4: full mock. Increasing difficulty, exam simulation.', 'worth' => '₹800'],
-                ['icon' => '🔄', 'title' => 'Edit & Regenerate Free', 'desc' => 'Plan pasand nahi aaya? Weak subjects change karo aur 7 din mein free regenerate karo. Unlimited tweaks.', 'worth' => '₹500'],
-                ['icon' => '📱', 'title' => 'App Jaisa Access + PDF', 'desc' => 'Phone pe install karo like app. Offline bhi padho. Plus premium PDF download — print karke wall pe lagao.', 'worth' => '₹300'],
+                ['icon' => '📄', 'title' => 'Premium PDF Download', 'desc' => 'Print-ready PDF with tricolor design, daily checkboxes, motivational quotes. Wall pe lagao, daily follow karo.', 'worth' => '₹300'],
                 ['icon' => '📅', 'title' => 'Exam Countdown Dashboard', 'desc' => '"X din baaki hai" — har din yaad dilayega. Aaj ka plan dikhayega. Lazy feel nahi hone dega.', 'worth' => '₹200'],
-                ['icon' => '🔥', 'title' => 'Streak & Consistency Score', 'desc' => '21 din consecutive padhe? Badge milega. Friends ke saath share karo. Accountability built-in.', 'worth' => '₹200'],
-                ['icon' => '🎁', 'title' => 'Refer & Earn ₹100 Off', 'desc' => 'Dost ko recommend karo. Jab wo buy kare, aapko ₹100 off milega next blueprint pe. Unlimited referrals.', 'worth' => 'BONUS'],
             ];
             foreach ($features as $f):
             ?>
@@ -612,7 +608,7 @@ $schemaExtra = str_replace(
             <div class="relative">
                 <p class="text-gray-400 text-xs uppercase tracking-widest mb-2">Total Value</p>
                 <div class="flex items-center justify-center gap-4 flex-wrap">
-                    <span class="text-white/40 line-through text-2xl sm:text-3xl font-bold">₹5,500+</span>
+                    <span class="text-white/40 line-through text-2xl sm:text-3xl font-bold">₹4,500+</span>
                     <span class="text-4xl sm:text-5xl font-black text-saffron-400">₹499</span>
                 </div>
                 <p class="text-gray-400 text-sm mt-2">One-time payment. No subscription. No hidden fees.</p>
@@ -667,13 +663,12 @@ $schemaExtra = str_replace(
                 </div>
                 <ul class="space-y-2.5">
                     <?php foreach ([
-                        '100% personalized — sirf AAPKE liye AI banata hai',
+                        '100% personalized — AI aapke problems samajh ke plan banata hai',
                         'Weak subjects pe 2x focus — AI samajhta hai',
                         'Har din ka timetable — kya padhna, kitne hours',
                         'Progress tracker — ✓ mark karo, streak banao',
                         'YouTube + Books + PYQ links — sab curated',
-                        'Phone pe app — offline bhi padho, kabhi bhi',
-                        'Plan pasand nahi? Free mein regenerate karo',
+                        'Premium PDF — print karo, wall pe lagao',
                     ] as $x): ?>
                     <li class="flex items-start gap-2 text-sm text-india-800">
                         <svg class="w-4 h-4 text-india-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
@@ -724,11 +719,10 @@ $schemaExtra = str_replace(
                 <ul class="space-y-2 mb-6">
                     <?php foreach ([
                         'AI-personalized 30-day plan',
+                        '7 diagnostic questions se personalized',
                         'Progress tracker + streaks',
                         'YouTube + Book + PYQ links',
-                        'Mock test schedule',
                         'Premium PDF download',
-                        'App access (offline bhi)',
                         '7-day money-back guarantee',
                     ] as $f): ?>
                     <li class="flex items-center gap-2 text-xs text-gray-700">
@@ -762,10 +756,9 @@ $schemaExtra = str_replace(
                     <?php foreach ([
                         'Sab kuch jo Starter mein hai',
                         '2 AI-personalized blueprints',
-                        'Edit & regenerate free (7 din)',
-                        'Priority AI generation',
+                        '2 exams ki taiyari ek saath',
                         'Exam countdown dashboard',
-                        'Referral rewards (₹100 off)',
+                        'Priority AI generation',
                         'SSC + Banking combo ke liye perfect',
                     ] as $f): ?>
                     <li class="flex items-center gap-2 text-xs text-gray-700">
@@ -796,9 +789,8 @@ $schemaExtra = str_replace(
                     <?php foreach ([
                         'Sab kuch jo Pro mein hai',
                         '3 AI-personalized blueprints',
-                        'Unlimited regenerations',
-                        'Lifetime access to all plans',
-                        'Future updates free mein',
+                        '3 exams ki taiyari ek saath',
+                        'Priority AI generation',
                         'SSC + Banking + Railway combo',
                         'Serious aspirants ke liye',
                     ] as $f): ?>
@@ -853,12 +845,12 @@ $schemaExtra = str_replace(
     </div>
     <div class="max-w-3xl mx-auto px-4 text-center relative">
         <h2 class="text-white font-display text-xl md:text-2xl font-bold mb-2">Har Din Exam Kareeb Aa Raha Hai</h2>
-        <p class="text-white/80 mb-5 text-sm">₹5,500+ ka complete coaching system sirf ₹499 mein. Aap kab shuru kar rahe ho?</p>
+        <p class="text-white/80 mb-5 text-sm">₹4,500+ ka complete coaching system sirf ₹499 mein. Aap kab shuru kar rahe ho?</p>
         <a href="#get-blueprint" class="inline-flex items-center gap-2 px-10 py-4 bg-white text-saffron-600 rounded-xl font-black text-lg hover:bg-gray-50 transition shadow-xl">
             ₹499 — Complete System Lo
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
         </a>
-        <p class="text-white/50 text-xs mt-3">7-din money back guarantee · Complete coaching system · 22+ exams · App + PDF + Progress Tracker</p>
+        <p class="text-white/50 text-xs mt-3">7-din money back guarantee · Hyper-personalized · 22+ exams · PDF + Progress Tracker</p>
     </div>
 </section>
 

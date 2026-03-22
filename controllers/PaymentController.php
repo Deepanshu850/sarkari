@@ -306,7 +306,9 @@ class PaymentController extends Controller {
             return;
         }
 
-        $this->generateAndFinalize($blueprintId, $blueprint, $blueprintModel);
+        // Has weak subjects (multi-step wizard) — redirect to generating page
+        $blueprintModel->update($blueprintId, ['status' => 'generating']);
+        redirect('/blueprint/generating/' . $blueprintId);
     }
 
     /**

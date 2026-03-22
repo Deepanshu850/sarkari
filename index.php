@@ -111,6 +111,7 @@ $router->post('/customize/{id}', [\App\Controllers\BlueprintController::class, '
 
 // Blueprint (auth required)
 $router->get('/blueprint/view/{id}', [\App\Controllers\BlueprintController::class, 'show']);
+$router->get('/blueprint/generating/{id}', [\App\Controllers\BlueprintController::class, 'showGenerating']);
 $router->get('/blueprint/retry/{id}', [\App\Controllers\BlueprintController::class, 'retry']);
 
 // Old multi-step flow (kept for logged-in users)

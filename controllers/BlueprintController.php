@@ -332,11 +332,13 @@ class BlueprintController extends Controller {
             'status'          => 'generating',
         ]);
 
-        // Re-fetch with updated data
+        // Show async generating page — AI runs via AJAX poll
         $blueprint = $blueprintModel->getWithExam((int) $id);
-
-        $paymentController = new \App\Controllers\PaymentController();
-        $paymentController->generateAndFinalize((int) $id, $blueprint, $blueprintModel);
+        $this->view('blueprint/generating', [
+            'pageTitle' => 'Generating Your Blueprint...',
+            'blueprint' => $blueprint,
+            'blueprintId' => (int) $id,
+        ]);
     }
 
     public function show(string $id): void {
@@ -378,46 +380,56 @@ class BlueprintController extends Controller {
         ]);
     }
 
+    /**
+     * GET /blueprint/generating/{id}
+     * Shows generating spinner for an existing blueprint.
+     */
+    public function showGenerating(string $id): void {
+        $this->requireAuth();
+        $blueprintModel = new Blueprint();
+        $blueprint = $blueprintModel->getWithExam((int) $id);
+
+        if (!$blueprint || (int)$blueprint['user_id'] !== \App\Core\Auth::id()) {
+            abort(404);
+        }
+
+        // If already ready, just redirect to view
+        if ($blueprint['status'] === 'ready') {
+            redirect('/blueprint/view/' . $id);
+            return;
+        }
+
+        $this->view('blueprint/generating', [
+            'pageTitle' => 'Generating Your Blueprint...',
+            'blueprint' => $blueprint,
+            'blueprintId' => (int) $id,
+        ]);
+    }
+
     public function retry(string $id): void {
         $this->requireAuth();
         $blueprintModel = new Blueprint();
         $blueprint = $blueprintModel->getWithExam((int) $id);
 
-        if (!$blueprint || $blueprint['user_id'] != Auth::id()) {
+        if (!$blueprint || (int)$blueprint['user_id'] !== \App\Core\Auth::id()) {
             abort(404);
         }
 
         if ($blueprint['status'] !== 'failed') {
             redirect('/dashboard');
+            return;
         }
 
-        try {
-            $blueprintModel->update((int) $id, ['status' => 'generating']);
-            $aiService = new \App\Services\AIService();
-            $result = $aiService->generateBlueprint($blueprint, $blueprint);
+        // Set to generating and show the async generating page
+        $blueprintModel->update((int) $id, ['status' => 'generating']);
+        $blueprint['status'] = 'generating';
 
-            $blueprintModel->clearDays((int) $id);
-            $blueprintModel->saveDays((int) $id, $result['days']);
-
-            $dbDays = $blueprintModel->getDays((int) $id);
-            $pdfService = new \App\Services\PdfService();
-            $user = (new \App\Models\User())->find(Auth::id());
-            $pdfPath = $pdfService->generateBlueprintPdf($blueprint, $dbDays, $user);
-
-            $blueprintModel->update((int) $id, [
-                'status'       => 'ready',
-                'ai_response'  => json_encode($result),
-                'summary'      => $result['summary'] ?? '',
-                'pdf_path'     => $pdfPath,
-                'generated_at' => date('Y-m-d H:i:s'),
-            ]);
-
-            flash('success', 'Blueprint generated successfully!');
-        } catch (\Exception $e) {
-            $blueprintModel->update((int) $id, ['status' => 'failed']);
-            error_log("Blueprint retry failed #{$id}: " . $e->getMessage());
-            flash('error', 'Generation failed. Please try again later.');
-        }
+        $this->view('blueprint/generating', [
+            'pageTitle' => 'Retrying Blueprint...',
+            'blueprint' => $blueprint,
+            'blueprintId' => (int) $id,
+        ]);
+        return;
 
         redirect('/dashboard');
     }
